@@ -1,0 +1,22 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
+ */
+package com.mycompany.diseniointeligente.ControladoresUI;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+
+/**
+ * FXML Controller class
+ *
+ * @author pirulo
+ */
+public class EditorEventoController extends EditorCartaController {
+
+    @Override
+    public void crearCarta(){
+        System.out.println("FALTA IMPLEMENTAR");
+    }
+}

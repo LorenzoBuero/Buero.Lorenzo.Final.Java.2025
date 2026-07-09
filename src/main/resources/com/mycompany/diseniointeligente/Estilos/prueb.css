@@ -1,0 +1,17 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+
+#btn_arriba {
+    -fx-font-color: #ffffff;
+    -fx-font-size: 30px;
+}
+
+.button {
+    -fx-background-color: #ff9999;
+}

@@ -22,11 +22,26 @@ public class Clado implements IParseable{
     }
     
     
-    public ArrayList<Clado> obtenerCladosAscendentes(){}
+    /*public ArrayList<Clado> obtenerCladosAscendentes(){}
     public ArrayList<Clado> obtenerCladosDescendentes(){}
     public static Boolean certificarCladoValido(){}
     public static ArrayList<Clado> obtenerCladosAscendentes(String clado){}
     public static ArrayList<Clado> obtenerCladosDescendentes(Clado clado){}
     public static ArrayList<Clado> obtenerCladosAscendentes(String clado){}
-    public static ArrayList<Clado> obtenerCladosDescendentes(Clado clado){}
+    public static ArrayList<Clado> obtenerCladosDescendentes(Clado clado){}*/
+
+    @Override
+    public String aCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String aJSON() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String aTextoDescriptivo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

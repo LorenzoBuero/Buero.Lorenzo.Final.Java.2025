@@ -2,8 +2,8 @@ package com.mycompany.diseniointeligente.Modelos;
 
 
 
-
-  //@author pirulo
+/*
+  //@author Lorenzo Buero
  
 public final class CartaHabilidadExtra extends Carta implements IParseable{
     
@@ -12,8 +12,8 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
     
     
     CartaHabilidadExtra(String nombre, NumeroIdentificador numId, String efecto, RamaCladistica objValidos){
-        numId.setTipoCarta(getCaracterRepresentativo()); 
-        this.efecto = efecto;
+        numId.setTipoCarta('W');//getCaracterRepresentativo()); 
+        //this.efecto = efecto;
         this.objetivosValidos = objValidos;
         super(nombre, numId);
     
@@ -23,5 +23,28 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
     public char getCaracterRepresentativo(){
         return 'H';
     }
+
+    @Override
+    public int compareTo(Object t) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String aCSV() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String aJSON() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String aTextoDescriptivo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
     
 }
+*/

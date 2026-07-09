@@ -16,13 +16,13 @@ public abstract class Carta implements Comparable, IParseable{
     }
     
     public Carta(String nombre, NumeroIdentificador numId){
-        this.numId = numId;   
+        //this.numId = numId;   
         this(nombre);
     }
     
     public Carta(String nombre, char tipoCarta, int numeroDeCarta, int numeroDeColeccion){
         NumeroIdentificador numID = new NumeroIdentificador(tipoCarta, numeroDeCarta, numeroDeColeccion);
-        this(nombre, numID);
+        //this(nombre, numID);
     }
     
     public abstract char getCaracterRepresentativo();
@@ -43,7 +43,7 @@ public abstract class Carta implements Comparable, IParseable{
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
-    
+    /*
     public String aResumenTXT(){
         String retorno = "";
         
@@ -51,7 +51,7 @@ public abstract class Carta implements Comparable, IParseable{
         retorno = retorno + "Número identificador: " + numId.getNumeroIdentificador() + "\n";
         
         return retorno;
-    }
+    }*/
     
     //@Override
     public boolean equals(Carta carta){

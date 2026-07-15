@@ -6,15 +6,22 @@ import java.lang.IllegalArgumentException;
 
 public class CosteDeCrecimiento implements IParseable{
     int cantidad;
-    EDieta comida;
+    //EDieta comida;
     
-    public CosteDeCrecimiento(int cantidad, EDieta comida){
+    public CosteDeCrecimiento(int cantidad){
         if(cantidad > 0){
             this.cantidad = cantidad;
-            this.comida = comida;
+            //this.comida = comida;
         } else {
             throw new IllegalArgumentException("Error, la cantidad debe ser mayor a 0");
         }
+    }
+    
+    @Override
+    public String toString(){
+        String retorno = "";
+        retorno += "Comida: " + this.cantidad;
+        return retorno;
     }
 
     @Override

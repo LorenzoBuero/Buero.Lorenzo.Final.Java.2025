@@ -1,5 +1,7 @@
 package com.mycompany.diseniointeligente.Modelos;
 
+import java.util.ArrayList;
+
 
  
 //@author pirulo
@@ -28,5 +30,13 @@ public class HabilidadEspecial implements IParseable{
         this.nombre = nombre;
         this.habilidad = habilidad;
     }
-    
+     
+    @Override
+    public String toString(){
+        String retorno = "";
+        
+        retorno += this.nombre + " " + this.habilidad;
+        
+        return retorno;
+    }
 }

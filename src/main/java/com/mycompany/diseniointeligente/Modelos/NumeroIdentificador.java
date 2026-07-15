@@ -1,26 +1,15 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-
-
-
 //@author pirulo
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 
 public class NumeroIdentificador implements IParseable{
 
-    @Override
-    public String aCSV() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public String aJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public String aTextoDescriptivo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
     
     private char tipoCarta;
     private int numeroColeccion;
@@ -37,6 +26,11 @@ public class NumeroIdentificador implements IParseable{
     public NumeroIdentificador(int numeroColeccion, int numeroCarta){
         this.numeroColeccion = numeroColeccion;
         this.numeroCarta = numeroCarta;
+    }
+    
+    public NumeroIdentificador(char tipoCarta, int numeroColeccion){
+        this.numeroColeccion = numeroColeccion;
+        this.tipoCarta = tipoCarta;
     }
     
     public NumeroIdentificador(String numID){
@@ -61,6 +55,9 @@ public class NumeroIdentificador implements IParseable{
 
     public String getNumeroColeccion() {
         return String.valueOf(numeroColeccion);
+    } 
+    public void setNumeroColeccion(int numero){
+        this.numeroColeccion = numero;
     }
 
     public String getNumeroCarta() {
@@ -77,6 +74,27 @@ public class NumeroIdentificador implements IParseable{
         retorno = retorno + DIVISOR;
         retorno = retorno + this.getNumeroCarta();
         
+        return retorno;
+    }
+    
+    
+    @Override
+    public String aCSV() {
+        String retorno = this.getNumeroIdentificador() + " ";
+        
+        return retorno;
+    }
+
+    @Override
+    public String aJSON()  throws JsonProcessingException {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(this);
+        return json;
+    }
+
+    @Override
+    public String aTextoDescriptivo() {
+        String retorno = "ID: " + getNumeroIdentificador() + "\n";
         return retorno;
     }
 }

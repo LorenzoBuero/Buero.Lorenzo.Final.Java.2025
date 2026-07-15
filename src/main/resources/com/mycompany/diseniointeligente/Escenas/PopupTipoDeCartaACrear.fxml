@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="250.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.PopupTipoDeCartaACrearController">
+    <stylesheets>
+        <URL value="@/com/mycompany/diseniointeligente/Estilos/popuptipodecartaacrear.css" />
+    </stylesheets>
+   <children>
+      <ChoiceBox fx:id="selectorDeTipo" layoutX="50.0" layoutY="50.0" prefWidth="150.0" />
+      <Label layoutX="26.0" layoutY="14.0" text="¿Que tipo de carta querés crear?" />
+      <Button fx:id="btn_continuar" layoutX="145.0" layoutY="94.0" mnemonicParsing="false" onAction="#continuar" prefHeight="26.0" prefWidth="91.0" text="Continuar" />
+      <Button fx:id="btn_cancelar" layoutX="26.0" layoutY="94.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="84.0" text="Cancelar" />
+   </children>
+</AnchorPane>

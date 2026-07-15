@@ -3,26 +3,26 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="560.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.EditorEventoController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="560.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.EditorEventoController">
     <stylesheets>
         <URL value="@/com/mycompany/diseniointeligente/Estilos/editorevento.css" />
     </stylesheets>
    <children>
-      <TextArea fx:id="nombreCarta" layoutX="24.0" layoutY="17.0" prefHeight="40.0" prefWidth="381.0" />
-      <ChoiceBox fx:id="id_coleccion" layoutX="459.0" layoutY="24.0" prefHeight="26.0" prefWidth="66.0" />
-      <RadioButton fx:id="coso_de_la_imagen" layoutX="24.0" layoutY="145.0" mnemonicParsing="false" text="poner imagen" />
-      <ImageView fitHeight="243.0" fitWidth="442.0" layoutX="59.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true" />
+      <ChoiceBox fx:id="cb_idColeccion" layoutX="459.0" layoutY="24.0" prefHeight="26.0" prefWidth="66.0" />
       <Separator layoutX="35.0" layoutY="366.0" prefHeight="4.0" prefWidth="510.0" />
       <TextArea fx:id="efecto" layoutX="38.0" layoutY="396.0" prefHeight="140.0" prefWidth="489.0" />
-      <TextArea fx:id="sacrificio" layoutX="38.0" layoutY="555.0" prefHeight="84.0" prefWidth="344.0" />
+      <TextArea fx:id="descripcionSacrificio" layoutX="38.0" layoutY="555.0" prefHeight="84.0" prefWidth="344.0" />
       <Button fx:id="btn_volver" layoutX="24.0" layoutY="685.0" mnemonicParsing="false" onAction="#volver" prefHeight="26.0" prefWidth="204.0" text="Volver" />
       <Button fx:id="btn_confirmar" layoutX="320.0" layoutY="685.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#continuar" prefHeight="26.0" prefWidth="219.0" text="Continuar" />
       <Button fx:id="btn_ventanaCondiciones" layoutX="405.0" layoutY="584.0" mnemonicParsing="false" onAction="#abrirVentanaCondiciones" text="Insertar condiciones" />
+      <ImageView fx:id="visorDeImagen" fitHeight="214.0" fitWidth="445.0" layoutX="60.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="btn_insertarImagen" layoutX="224.0" layoutY="333.0" mnemonicParsing="false" onAction="#obtenerImagen" text="Insertar Imagen" />
+      <TextField fx:id="nombreCarta" layoutX="34.0" layoutY="24.0" prefHeight="26.0" prefWidth="388.0" />
    </children>
 </AnchorPane>

@@ -1,16 +1,14 @@
 package com.mycompany.diseniointeligente.Modelos;
 
+  //@author Lorenzo Buer
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-
- 
-  //@author Lorenzo
- 
 public interface IParseable {
     
     public abstract String aCSV();
     
-    public abstract String aJSON();
+    public abstract String aJSON () throws JsonProcessingException;
     
     public abstract String aTextoDescriptivo();
 }

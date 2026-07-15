@@ -1,6 +1,8 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper; 
+import com.fasterxml.jackson.databind.ObjectWriter; 
 //import java.lang.IllegalArgumentException;
 
 //@author Lorenzo Buero
@@ -19,20 +21,35 @@ public class AtaqueVida implements IParseable{
             throw new IllegalArgumentException();
         }
     }
-
+    
     @Override
-    public String aCSV() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String toString(){
+        String retorno = "";
+        retorno += "Ataque: " + this.ataque + "    Vida: " + this.vida;
+        return retorno;
     }
 
     @Override
-    public String aJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String aCSV() {
+        String retorno = " ";
+        retorno = retorno + ataque + " , ";
+        retorno = retorno + vida + " ";
+        return retorno;
+    }
+
+    @Override
+    public String aJSON() throws JsonProcessingException {
+        
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(this);
+        return json;
     }
 
     @Override
     public String aTextoDescriptivo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String retorno;
+        retorno = "Ataque: " + ataque + "Vida: " + vida;
+        return retorno;
     }
     
     

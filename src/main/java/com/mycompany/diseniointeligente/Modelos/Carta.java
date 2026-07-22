@@ -31,7 +31,7 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
         this(nombre, numID);
     }
     
-    public abstract char getCaracterRepresentativo();
+    public abstract Character getCaracterRepresentativo();
     
     
     public NumeroIdentificador getNumId(){
@@ -95,6 +95,11 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
             retorno.add(EAtributoCarta.NUM_IDENT);
         }
         return retorno;
+    }
+    
+    @Override 
+    public int compareTo(Carta comparado) {
+        return this.getNumId().compareTo(comparado.getNumId());
     }
     
     @Override

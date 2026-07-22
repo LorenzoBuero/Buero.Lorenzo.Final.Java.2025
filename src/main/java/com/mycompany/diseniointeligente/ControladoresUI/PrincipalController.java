@@ -1,24 +1,16 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
+import com.mycompany.diseniointeligente.GestionDeDatos.Gestor;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.ETipoCarta;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
@@ -36,7 +28,7 @@ public class PrincipalController {
     @FXML
     private ListView<Carta> scrollerCartas;
     
-    private Carta cartita;
+    private Gestor<Carta> gestorCartas = new Gestor<>();
     
     
     public void mostrarSelectorFiltros(ActionEvent evento){}
@@ -47,8 +39,12 @@ public class PrincipalController {
             ETipoCarta tipoACrear = this.preguntarTipoCartaACrear();
             
             Carta cartaCreada = mostrarEditorDeCartas(tipoACrear);
+            
+            
             if(cartaCreada != null){
                 System.out.println(cartaCreada.getNombre());
+                this.gestorCartas.crear(cartaCreada);
+                this.scrollerCartas.getItems().addAll(this.gestorCartas.leer());
             }
             
             

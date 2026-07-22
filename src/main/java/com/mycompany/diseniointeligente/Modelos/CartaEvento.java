@@ -83,13 +83,8 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
 
     
     @Override
-    public char getCaracterRepresentativo(){
+    public Character getCaracterRepresentativo(){
         return CARACTER_REPRESENTATIVO;
-    }
-
-    @Override
-    public int compareTo(Carta t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override

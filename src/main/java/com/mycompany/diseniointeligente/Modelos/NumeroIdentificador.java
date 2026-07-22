@@ -1,13 +1,13 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-//@author pirulo
+//@author Lorenzo Buero
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 
-public class NumeroIdentificador implements IParseable{
+public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentificador>{
 
     
     
@@ -95,6 +95,22 @@ public class NumeroIdentificador implements IParseable{
     @Override
     public String aTextoDescriptivo() {
         String retorno = "ID: " + getNumeroIdentificador() + "\n";
+        return retorno;
+    }
+
+    @Override
+    public int compareTo(NumeroIdentificador comparado) {
+        int retorno = 0;
+        if(this.numeroColeccion < comparado.numeroColeccion){
+            retorno = -1;
+        } else if(this.numeroColeccion > comparado.numeroColeccion){
+            retorno = 1;
+        } else if(this.numeroCarta < comparado.numeroCarta){
+            retorno = -1;
+        } else if(this.numeroCarta > comparado.numeroCarta){
+            retorno = 1;
+        }
+        
         return retorno;
     }
 }

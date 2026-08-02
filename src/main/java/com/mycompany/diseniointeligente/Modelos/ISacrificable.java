@@ -9,5 +9,5 @@ package com.mycompany.diseniointeligente.Modelos;
  * @author pirulo
  */
 public interface ISacrificable {
-    public String obtenerAtributo(IAtributo atributoBuscado);
+    public Object obtenerAtributo(IAtributo atributoBuscado);
 }

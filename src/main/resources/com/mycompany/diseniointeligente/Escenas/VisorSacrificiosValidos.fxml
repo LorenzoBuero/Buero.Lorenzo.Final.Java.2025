@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="397.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.VisorSacrificiosValidosController">
+   <children>
+      <Button fx:id="btn_cerrar" layoutX="81.0" layoutY="360.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="26.0" prefWidth="246.0" text="Cerrar" />
+      <ScrollPane layoutX="16.0" layoutY="32.0" prefHeight="291.0" prefWidth="359.0">
+         <content>
+            <Label fx:id="lbl_cartasValidas" text="No hay objetivos validos" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

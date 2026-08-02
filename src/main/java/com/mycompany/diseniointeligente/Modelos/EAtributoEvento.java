@@ -9,8 +9,8 @@ public enum EAtributoEvento implements IAtributo{
     DESCRIPCION_SACRIFICIO;
     
     
-    public static String obtenerComoString(EAtributoEvento atributo){
-        return switch(atributo){
+    public String obtenerComoString(){
+        return switch(this){
             case EFECTO -> "Evento > Efecto";
             case DESCRIPCION_SACRIFICIO -> "Evento > Descripcion del sacrificio";
         };
@@ -21,6 +21,14 @@ public enum EAtributoEvento implements IAtributo{
             case "Evento > Efecto" -> EFECTO;
             case "Evento > Descripcion del sacrificio" -> DESCRIPCION_SACRIFICIO;
             default -> null;
+        };
+    }
+    
+    @Override
+    public Class obtenerClase(){
+        return switch(this){
+            case EFECTO -> String.class;
+            case DESCRIPCION_SACRIFICIO -> String.class;
         };
     }
 }

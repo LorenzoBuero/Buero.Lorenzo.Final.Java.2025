@@ -8,8 +8,9 @@ public enum EAtributoCarta implements IAtributo{
     NUM_IDENT,
     NOMBRE;
     
-    public static String obtenerComoString(EAtributoCarta atributo){
-        return switch(atributo){
+    @Override
+    public String obtenerComoString(){
+        return switch(this){
             case NUM_IDENT -> "Carta > Numero Identificador";
             case NOMBRE -> "Carta > Nombre";
         };
@@ -20,6 +21,14 @@ public enum EAtributoCarta implements IAtributo{
             case "Carta > Numero Identificador" -> NUM_IDENT;
             case "Carta > Nombre" -> NOMBRE;
             default -> null;
+        };
+    }
+    
+    @Override
+    public Class obtenerClase(){   
+        return switch(this){
+            case NUM_IDENT -> NumeroIdentificador.class;
+            case NOMBRE -> String.class;
         };
     }
 }

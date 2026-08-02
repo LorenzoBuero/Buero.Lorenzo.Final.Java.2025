@@ -1,8 +1,8 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 
@@ -29,6 +29,21 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
         super(nombre, numId);
     }
     
+    @JsonCreator
+    private CartaHabilidadExtra(
+            @JsonProperty("numId") NumeroIdentificador numId,
+            @JsonProperty("urlImagen") String URL,
+            @JsonProperty("nombre") String nombreCarta,
+            @JsonProperty("efecto") String efecto,
+            @JsonProperty("descripcionObjetivos") String descripcionObjetivos){
+    
+        
+        super(nombreCarta, numId, URL);
+        
+        this.efecto = efecto;
+        this.descripcionObjetivos = descripcionObjetivos;
+    }
+    
     public String getEfecto() {
         return efecto;
     }
@@ -46,7 +61,7 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
     }
     
     
-    
+    @JsonIgnore
     @Override
     public Character getCaracterRepresentativo(){
         return CARACTER_REPRESENTATIVO;
@@ -62,18 +77,15 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
         return retorno;
     }
 
-    @Override
-    public String aJSON() throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(this);
-        return json;
-    }
+    
 
     @Override
     public String aTextoDescriptivo() {
-        String retorno = super.aTextoDescriptivo();
-        retorno += "Efecto :" + efecto;
-        //retorno += objetivosValidos.aTextoDescriptivo();
+        String retorno = super.aTextoDescriptivo() + "\n";        
+        
+        retorno += "Efecto: " + efecto + "\n\n";
+        
+        retorno += "Objetivos: " + this.descripcionObjetivos + "\n\n";
        
         return retorno;
     }

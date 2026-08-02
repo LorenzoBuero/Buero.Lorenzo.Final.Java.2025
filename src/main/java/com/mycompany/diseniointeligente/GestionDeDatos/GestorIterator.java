@@ -1,5 +1,6 @@
 package com.mycompany.diseniointeligente.GestionDeDatos;
 
+import com.mycompany.diseniointeligente.Modelos.IParseable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  *
  * @author Lorenzo Buero
  */
-public class GestorIterator<T> implements Iterator<T> {
+public class GestorIterator<T extends IParseable> implements Iterator<T> {
 
     private List<T> lista;
     private int indice = 0;

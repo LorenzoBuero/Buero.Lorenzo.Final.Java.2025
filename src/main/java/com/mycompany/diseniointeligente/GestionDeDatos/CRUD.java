@@ -4,18 +4,26 @@
  */
 package com.mycompany.diseniointeligente.GestionDeDatos;
 
+import com.mycompany.diseniointeligente.Modelos.IParseable;
 import java.util.List;
 
 /**
  *
  * @author pirulo
  */
-public interface CRUD<T> {
+public interface CRUD<T extends IParseable> {
     void crear(T elemento);
+    
+    void crear(List<T> elementos);
 
     List<T> leer();
 
     void actualizar(int indice, T elemento);
 
     void eliminar(int indice);
+    
+    public boolean cargarDatos(String carpeta, String nombre);
+    
+    public boolean guardarDatos(String carpeta, String nombre);
+
 }

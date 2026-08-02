@@ -1,14 +1,25 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.ArrayList;
 
 
 
 //@author Lorenzo Buero
  
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "tipo"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = CartaCriatura.class, name = "Criatura"),
+    @JsonSubTypes.Type(value = CartaHabilidadExtra.class, name = "Habilidad Extra"),
+    @JsonSubTypes.Type(value = CartaEvento.class, name = "Evento")
+})
 public sealed abstract class Carta implements Comparable<Carta>, IParseable permits CartaCriatura, CartaEvento, CartaHabilidadExtra{
     
     private NumeroIdentificador numId;
@@ -25,6 +36,13 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
         this.numId = numId;   
         this(nombre);
     }
+    
+    public Carta(String nombre, NumeroIdentificador numId, String URL){
+        this.numId = numId;   
+        this.urlImagen = URL;
+        this(nombre);
+    }
+    
     
     public Carta(String nombre, char tipoCarta, int numeroDeCarta, int numeroDeColeccion){
         NumeroIdentificador numID = new NumeroIdentificador(tipoCarta, numeroDeCarta, numeroDeColeccion);
@@ -106,20 +124,14 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
     public String aCSV() {
         String retorno;
         
-        retorno = this.numId.aCSV() + " , ";
-        retorno += this.nombre + " , ";
-        retorno += this.urlImagen;
+        retorno = this.getNumId().aCSV() + " , ";
+        retorno += this.getNombre() + " , ";
+        retorno += this.getUrlImagen();
         
         return retorno;
     }
 
-    @Override
-    public String aJSON()  throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(this);
-        return json;
-    }
-
+    
     @Override
     public String aTextoDescriptivo() {
         String retorno;

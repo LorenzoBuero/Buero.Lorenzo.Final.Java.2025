@@ -22,8 +22,16 @@ public class PopupAgregarHabilidadEspecialController extends ControladorPopup{
     
     HabilidadEspecial habilidadEspecial;
     
+    /*public PopupAgregarHabilidadEspecialController(HabilidadEspecial habilidad){
+        this.setHabilidad(habilidad);
+    }*/
+    
     public void setHabilidad(HabilidadEspecial habilidad){
         this.habilidadEspecial = habilidad;
+        if(habilidad != null){
+            this.nombreHabilidad.setText(habilidad.nombre);
+            this.descripcionHabilidad.setText(habilidad.habilidad);
+        }
     }
     
     public HabilidadEspecial getHabilidad(){

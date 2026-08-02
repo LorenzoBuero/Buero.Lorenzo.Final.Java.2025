@@ -6,17 +6,20 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.PrincipalController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.PrincipalController">
     <stylesheets>
         <URL value="@/com/mycompany/diseniointeligente/Estilos/principal.css" />
     </stylesheets>
    <children>
-      <Button fx:id="btn_editar" layoutX="516.0" layoutY="76.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" text="Editar" />
-      <Button fx:id="btn_cartaNueva" layoutX="14.0" layoutY="354.0" mnemonicParsing="false" onAction="#irAEditorCartas" prefHeight="32.0" prefWidth="200.0" text="Carta Nueva" />
-      <Button fx:id="btn_eliminar" layoutX="516.0" layoutY="274.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" text="Eliminar" />
+      <Button fx:id="btn_editar" layoutX="516.0" layoutY="40.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" text="Editar" />
+      <Button fx:id="btn_cartaNueva" layoutX="14.0" layoutY="354.0" mnemonicParsing="false" onAction="#procesoCrearCarta" prefHeight="32.0" prefWidth="200.0" text="Carta Nueva" />
+      <Button fx:id="btn_eliminar" layoutX="516.0" layoutY="119.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" text="Eliminar" />
       <Button fx:id="btn_filtros" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostrarSelectorFiltros" prefHeight="26.0" prefWidth="200.0" text="Filtros" />
-      <Label fx:id="descripcionCarta" alignment="TOP_LEFT" layoutX="227.0" layoutY="27.0" prefHeight="332.0" prefWidth="265.0" text="Sin cartas seleccionadas" />
-      <Button fx:id="btn_verImagen" layoutX="317.0" layoutY="357.0" mnemonicParsing="false" text="verImagen" />
+      <Label fx:id="descripcionCarta" alignment="TOP_LEFT" layoutX="227.0" layoutY="27.0" prefHeight="332.0" prefWidth="265.0" text="No hay ninguna carta seleccionada" wrapText="true" />
+      <Button fx:id="btn_verImagen" layoutX="257.0" layoutY="357.0" mnemonicParsing="false" onAction="#verImagen" text="ver imagen" />
       <ListView fx:id="listaCartas" layoutX="14.0" layoutY="52.0" prefHeight="285.0" prefWidth="200.0" />
+      <Button fx:id="btn_guardarCartas" layoutX="480.0" layoutY="292.0" mnemonicParsing="false" onAction="#guardarCartas" text="Guardar Cartas" />
+      <Button fx:id="btn_cargarCartas" layoutX="484.0" layoutY="245.0" mnemonicParsing="false" onAction="#cargarCartas" text="Cargar Cartas" />
+      <Button fx:id="btn_verSacrificios" layoutX="360.0" layoutY="357.0" mnemonicParsing="false" onAction="#verSacrificiosValidos" text="ver sacrificios" />
    </children>
 </AnchorPane>

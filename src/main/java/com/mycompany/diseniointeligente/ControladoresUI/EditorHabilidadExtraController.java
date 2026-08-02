@@ -57,7 +57,7 @@ public class EditorHabilidadExtraController extends EditorCartaController implem
         
         //DESCRIPCION DE OBJETIVOS VALIDOS
         if(this.descripcionObjetivosFueIngresado()){
-            String descripcionIngresado = this.efecto.getText();
+            String descripcionIngresado = this.descripcionObjetivos.getText();
             cartaNueva.setDescripcionObjetivos(descripcionIngresado);
         }
         

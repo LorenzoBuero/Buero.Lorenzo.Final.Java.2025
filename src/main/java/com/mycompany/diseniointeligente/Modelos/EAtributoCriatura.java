@@ -12,8 +12,9 @@ public enum EAtributoCriatura implements IAtributo{
     HABITAT,
     DIETA;
     
-    public static String obtenerComoString(EAtributoCriatura atributo){
-        return switch(atributo){
+    @Override
+    public String obtenerComoString(){
+        return switch(this){
             //case CLADISTICA -> "Criatura > Numero Identificador";
             case HABILIDADES_BASICAS -> "Criatura > Habilidades basicas";
             case HABILIDAD_ESPECIAL -> "Criatura > Habilidad especial";
@@ -33,4 +34,18 @@ public enum EAtributoCriatura implements IAtributo{
             default -> null;
         };
     }
+
+    @Override
+    public Class obtenerClase() {
+        return switch(this){
+            case HABILIDADES_BASICAS -> EHabilidadBasica.class;
+            case HABILIDAD_ESPECIAL -> HabilidadEspecial.class;
+            case ESTADISTICAS -> Estadisticas.class;
+            case HABITAT -> EHabitat.class;
+            case DIETA -> EDieta.class;
+        };
+    }
+    
+    
+    
 }

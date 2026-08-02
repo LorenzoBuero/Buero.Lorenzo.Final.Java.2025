@@ -2,9 +2,10 @@ package com.mycompany.diseniointeligente.Modelos;
 
 //@author Lorenzo Buero
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 
 public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentificador>{
@@ -17,7 +18,13 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
     
     private final String DIVISOR = "-";
     
-    public NumeroIdentificador(char tipoCarta, int numeroColeccion, int numeroCarta){
+    
+    
+    @JsonCreator
+    public NumeroIdentificador(
+            @JsonProperty("tipoCarta") char tipoCarta, 
+            @JsonProperty("numeroColeccion") int numeroColeccion, 
+            @JsonProperty("numeroCarta") int numeroCarta){
         this.tipoCarta = tipoCarta;
         this.numeroColeccion = numeroColeccion;
         this.numeroCarta = numeroCarta;
@@ -63,8 +70,11 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
     public String getNumeroCarta() {
         return String.valueOf(numeroCarta);
     }
+    public void setNumeroCarta(int numeroCarta) {
+        this.numeroCarta = numeroCarta;
+    }
 
-    
+    @JsonIgnore
     public String getNumeroIdentificador(){
         String retorno = "";
         
@@ -83,13 +93,6 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
         String retorno = this.getNumeroIdentificador() + " ";
         
         return retorno;
-    }
-
-    @Override
-    public String aJSON()  throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(this);
-        return json;
     }
 
     @Override

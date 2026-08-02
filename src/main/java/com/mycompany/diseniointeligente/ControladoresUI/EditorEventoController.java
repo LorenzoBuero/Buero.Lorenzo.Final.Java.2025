@@ -5,11 +5,17 @@ import com.mycompany.diseniointeligente.Modelos.CartaEvento;
 import com.mycompany.diseniointeligente.Modelos.ETipoCarta;
 import com.mycompany.diseniointeligente.Modelos.IAtributo;
 import com.mycompany.diseniointeligente.Modelos.NumeroIdentificador;
+import com.mycompany.diseniointeligente.Modelos.Sacrificio;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
  
@@ -22,6 +28,7 @@ public class EditorEventoController extends EditorCartaController implements IEd
     public TextArea efecto;
     public TextArea descripcionSacrificio;
     
+    private Sacrificio logicaSacrificio;
     
     @Override
     public ETipoCarta obtenerTipoDeCarta(){
@@ -59,6 +66,10 @@ public class EditorEventoController extends EditorCartaController implements IEd
             cartaNueva.setDescripcionSacrificio(descripcionIngresado);
         }
         
+        if(this.sacrificioFueIngresado()){
+            cartaNueva.setSacrificio(this.logicaSacrificio);
+        }
+        
         //IMAGEN
         if(this.imagenFueIngresada()){
             
@@ -84,7 +95,32 @@ public class EditorEventoController extends EditorCartaController implements IEd
     }
     
     public void abrirVentanaCondiciones(ActionEvent evento){
-    
+        try{
+
+            FXMLLoader cargador = new FXMLLoader(getClass().getResource("/com/mycompany/diseniointeligente/Escenas/PopupAgregarLogicaSacrificio.fxml"));
+            Parent objetivo = cargador.load();
+
+            PopupAgregarLogicaSacrificioController controlador = cargador.getController();
+            //if(this.logicaSacrificio != null){
+                controlador.setSacrificio(this.logicaSacrificio);
+            //}
+            
+            Stage escenario = new Stage();
+            escenario.initModality(Modality.APPLICATION_MODAL);
+
+            Scene escena = new Scene(objetivo);
+
+            escenario.setScene(escena);
+            escenario.showAndWait();
+
+            Sacrificio sacrificioActualizado = controlador.getSacrificio();
+            if(sacrificioActualizado != null){
+                this.logicaSacrificio = sacrificioActualizado;
+            }
+            
+        } catch (IOException ex){
+            System.out.println(ex.getLocalizedMessage());
+        }
     }
     
     
@@ -129,6 +165,15 @@ public class EditorEventoController extends EditorCartaController implements IEd
         Boolean retorno = true;
     
         if(this.descripcionSacrificio.getText() == null){
+            retorno = false;
+        }
+        
+        return retorno;
+    }
+    private boolean sacrificioFueIngresado(){
+        Boolean retorno = true;
+    
+        if(this.logicaSacrificio == null){
             retorno = false;
         }
         

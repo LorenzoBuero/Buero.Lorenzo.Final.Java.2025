@@ -1,0 +1,91 @@
+[ {
+  "tipo" : "Evento",
+  "numId" : {
+    "tipoCarta" : "E",
+    "numeroColeccion" : "1",
+    "numeroCarta" : "0"
+  },
+  "urlImagen" : "Img_Frio Intenso.png",
+  "nombre" : "Frio Intenso",
+  "efecto" : "Todos los animalitos tienen frio xddd",
+  "descripcionSacrificio" : "Todos los animalitos tienen frio xddd",
+  "sacrificio" : {
+    "operacion" : "IGUALDAD",
+    "valorBuscado" : "Diplodocus Facheris",
+    "atributoDeCarta" : "NOMBRE"
+  }
+}, {
+  "tipo" : "Criatura",
+  "numId" : {
+    "tipoCarta" : "H",
+    "numeroColeccion" : "1",
+    "numeroCarta" : "0"
+  },
+  "urlImagen" : "Img_Diplodocus Facheris.png",
+  "genero" : "Diplodocus",
+  "especie" : "Facheris",
+  "habilidadesBasicas" : null,
+  "habilidadEspecial" : {
+    "nombre" : "Latigazo",
+    "habilidad" : "pega fuerte"
+  },
+  "estadisticas" : {
+    "progresoAtaqueVida" : [ {
+      "ataque" : 4,
+      "vida" : 4
+    }, {
+      "ataque" : 51,
+      "vida" : 101
+    } ],
+    "requisitoCrecimiento" : [ null, {
+      "cantidad" : 62
+    } ]
+  },
+  "habitat" : "LLANURA",
+  "dieta" : "HERBIVORO"
+}, {
+  "tipo" : "Criatura",
+  "numId" : {
+    "tipoCarta" : "H",
+    "numeroColeccion" : "1",
+    "numeroCarta" : "0"
+  },
+  "urlImagen" : "Img_aa bb.png",
+  "genero" : "bb",
+  "especie" : "aa",
+  "habilidadesBasicas" : [ "NADAR", "GARRAZO" ],
+  "habilidadEspecial" : {
+    "nombre" : "asdcawcx",
+    "habilidad" : "ccccccccc"
+  },
+  "estadisticas" : {
+    "progresoAtaqueVida" : [ {
+      "ataque" : 4,
+      "vida" : 44
+    }, {
+      "ataque" : 33,
+      "vida" : 55
+    }, {
+      "ataque" : 22,
+      "vida" : 454
+    } ],
+    "requisitoCrecimiento" : [ null, {
+      "cantidad" : 6
+    }, {
+      "cantidad" : 11
+    } ]
+  },
+  "habitat" : "LLANURA",
+  "dieta" : "CARNIVORO"
+}, {
+  "tipo" : "Habilidad Extra",
+  "numId" : {
+    "tipoCarta" : "H",
+    "numeroColeccion" : "1",
+    "numeroCarta" : "0"
+  },
+  "urlImagen" : "Img_Plumines.png",
+  "nombre" : "Plumines",
+  "efecto" : "plumissssssssssssssssssssss",
+  "descripcionObjetivos" : "plumissssssssssssssssssssss"
+} ]

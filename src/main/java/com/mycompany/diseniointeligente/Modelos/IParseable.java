@@ -8,7 +8,7 @@ public interface IParseable {
     
     public abstract String aCSV();
     
-    public abstract String aJSON () throws JsonProcessingException;
+    //public abstract String aJSON () throws JsonProcessingException;
     
     public abstract String aTextoDescriptivo();
 }

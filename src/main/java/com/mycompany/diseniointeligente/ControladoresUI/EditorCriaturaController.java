@@ -137,7 +137,8 @@ public class EditorCriaturaController extends EditorCartaController implements I
 
             FXMLLoader cargador = new FXMLLoader(getClass().getResource("/com/mycompany/diseniointeligente/Escenas/PopupAgregarHabilidadEspecial.fxml"));
             Parent objetivo = cargador.load();
-
+            
+            
             PopupAgregarHabilidadEspecialController controlador = cargador.getController();
             controlador.setHabilidad(this.habilidadEspecialIngresada);
 
@@ -177,8 +178,8 @@ public class EditorCriaturaController extends EditorCartaController implements I
             String especieIngresada = this.especie.getText().trim();
             String generoIngresado = this.genero.getText().trim();
             
-            cartaNueva.setGenero(especieIngresada);
-            cartaNueva.setEspecie(generoIngresado);
+            cartaNueva.setGenero(generoIngresado);
+            cartaNueva.setEspecie(especieIngresada);
             
             String nombre = generoIngresado + " " + especieIngresada;
             
@@ -213,7 +214,7 @@ public class EditorCriaturaController extends EditorCartaController implements I
         //IMAGEN
         if(this.imagenFueIngresada()){
             
-            this.guardarImagenDeCarta(cartaCreada);
+            this.guardarImagenDeCarta(cartaNueva);
         }
         
         this.cartaCreada = cartaNueva;

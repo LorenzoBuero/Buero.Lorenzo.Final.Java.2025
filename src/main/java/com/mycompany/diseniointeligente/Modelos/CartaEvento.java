@@ -1,5 +1,8 @@
 package com.mycompany.diseniointeligente.Modelos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -24,6 +27,23 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
         super(nombre);
     }
     
+    @JsonCreator
+    private CartaEvento(@JsonProperty("numId") NumeroIdentificador numId,
+            @JsonProperty("urlImagen") String URL,
+            @JsonProperty("nombre") String nombreCarta,
+            @JsonProperty("efecto") String efecto,
+            @JsonProperty("descripcionSacrificio") String descripcionSacrificio,
+            @JsonProperty("sacrificio") Sacrificio sacrificio){
+    
+        
+        super(nombreCarta, numId, URL);
+        
+        this.efecto = efecto;
+        this.descripcionSacrificio = descripcionSacrificio;
+        this.sacrificio = sacrificio;
+    }
+    
+    
     public void setEfecto(String efecto){
         this.efecto = efecto;
     }
@@ -47,7 +67,7 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
     
     
     @Override
-    public String obtenerAtributo(IAtributo atributoBuscado) {
+    public Object obtenerAtributo(IAtributo atributoBuscado) {
         String retorno = null;
         
         switch (atributoBuscado) {
@@ -81,7 +101,7 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
         return retorno;
     }
 
-    
+    @JsonIgnore
     @Override
     public Character getCaracterRepresentativo(){
         return CARACTER_REPRESENTATIVO;
@@ -95,19 +115,15 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
         return retorno;
     }
 
-    @Override
-    public String aJSON() throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(this);
-        return json;
-    }
 
     @Override
     public String aTextoDescriptivo() {
-        String retorno = super.aTextoDescriptivo();
+        String retorno = super.aTextoDescriptivo() + "\n";
+        
+        retorno += "Efecto: " + this.efecto + "\n\n";
+        
+        retorno += "Sacrificio: " + this.descripcionSacrificio + "\n\n";
         
         return retorno;
     }
-    
-    
 }

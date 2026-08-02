@@ -1,5 +1,6 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
+import com.mycompany.diseniointeligente.GestionDeDatos.EscritorDeArchivos;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.CartaCriatura;
 import com.mycompany.diseniointeligente.Modelos.CartaEvento;
@@ -52,15 +53,10 @@ public abstract class EditorCartaController {
         cb_idColeccion.getItems().addAll(tiposEnEnumColecciones); 
     }
     
-    
-    
-    
-    
-    
-    
     public BufferedImage getImagenObtenida(){
         return imagenObtenida;
     }
+    
     public void setImagenObtenida(BufferedImage imagen){
         this.imagenObtenida = imagen;
     }
@@ -70,9 +66,11 @@ public abstract class EditorCartaController {
     public Boolean getGuardarCambios(){
         return this.guardarCambios;
     }
+    
     public void setGuardarCambios(Boolean valor){
         this.guardarCambios = valor;
     }
+    
     public abstract Carta getCartaCreada();
     
     
@@ -120,18 +118,17 @@ public abstract class EditorCartaController {
     
     public void guardarImagenDeCarta(Carta cartaConImagen){
         try {
-                Path carpeta = Path.of("ImagenesCartas");
-                Files.createDirectories(carpeta);
+                String nombreArchivo = "Img_" + cartaConImagen.getNombre();
+                
+                EscritorDeArchivos.guardarImagenAPNG(this.imagenObtenida, "ImagenesCartas", nombreArchivo);
 
-                String nombreArchivo = "Img_" + cartaConImagen.getNombre() + ".png";
-                Path archivo = carpeta.resolve(nombreArchivo);
-
-                ImageIO.write(this.getImagenObtenida(), "png", archivo.toFile());
-
+                nombreArchivo += ".png";
+                
                 cartaConImagen.setUrlImagen(nombreArchivo);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+                
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
 }

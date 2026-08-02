@@ -1,5 +1,7 @@
 package com.mycompany.diseniointeligente.Modelos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 
@@ -13,20 +15,25 @@ public class HabilidadEspecial implements IParseable{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public String aJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 
     @Override
     public String aTextoDescriptivo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String retorno = "";
+        
+        retorno += "Nombre de Habilidad Especial: " + this.nombre + "\n";
+        retorno += "Descripcion: " + this.habilidad + "\n";
+        
+        return retorno;
     }
 
     public String nombre;
     public String habilidad;
 
-    public HabilidadEspecial(String nombre, String habilidad){
+    @JsonCreator
+    public HabilidadEspecial(@JsonProperty("nombre") String nombre, 
+            @JsonProperty("habilidad") String habilidad){
+        
         this.nombre = nombre;
         this.habilidad = habilidad;
     }

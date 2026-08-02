@@ -1,9 +1,10 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper; 
-import com.fasterxml.jackson.databind.ObjectWriter; 
 //import java.lang.IllegalArgumentException;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 //@author Lorenzo Buero
 
@@ -13,14 +14,27 @@ public class AtaqueVida implements IParseable{
     private int ataque;
     private int vida;
 
-    public AtaqueVida(int ataque, int vida){
-        if(ataque > 0 && vida > 0){
+    @JsonCreator
+    public AtaqueVida(
+            @JsonProperty("ataque") int ataque, 
+            @JsonProperty("vida") int vida){
+        
+        if(ataque >= 0 && vida > 0){
             this.ataque = ataque;
             this.vida = vida;
         } else {
             throw new IllegalArgumentException();
         }
     }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public int getVida() {
+        return vida;
+    }
+    
     
     @Override
     public String toString(){
@@ -38,17 +52,9 @@ public class AtaqueVida implements IParseable{
     }
 
     @Override
-    public String aJSON() throws JsonProcessingException {
-        
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(this);
-        return json;
-    }
-
-    @Override
     public String aTextoDescriptivo() {
         String retorno;
-        retorno = "Ataque: " + ataque + "Vida: " + vida;
+        retorno = "Ataque/Vida: " + ataque + "/" + vida;
         return retorno;
     }
     

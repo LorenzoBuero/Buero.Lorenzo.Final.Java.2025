@@ -1,14 +1,14 @@
 package com.mycompany.diseniointeligente.Modelos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
  
 //@author Lorenzo Buero
 
 public final class CartaCriatura extends Carta implements IParseable, ISacrificable{
-    //RamaCladistica cladistica = null;
+    
     String genero = null;
     String especie = null;
     ArrayList<EHabilidadBasica> habilidadesBasicas = null;
@@ -24,15 +24,37 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
     public CartaCriatura(String nombre) {
         super(nombre);
     }
-
-    /*public RamaCladistica getCladistica() {
-        return cladistica;
+    
+    @JsonCreator
+    private CartaCriatura(
+            @JsonProperty("numId") NumeroIdentificador numId,
+            @JsonProperty("urlImagen") String URL,
+            @JsonProperty("genero") String genero, 
+            @JsonProperty("especie") String especie, 
+            @JsonProperty("habilidadesBasicas") ArrayList<EHabilidadBasica> habilidadesBasicas,
+            @JsonProperty("habilidadEspecial") HabilidadEspecial habilidadEspecial,
+            @JsonProperty("estadisticas") Estadisticas estadisticas,
+            @JsonProperty("habitat") EHabitat habitat,
+            @JsonProperty("dieta") EDieta dieta){
+    
+        String nombreCarta = genero + " " + especie;
+        super(nombreCarta, numId, URL);
+        this.genero = genero;
+        this.especie = especie;
+        this.habilidadesBasicas = habilidadesBasicas;
+        this.habilidadEspecial = habilidadEspecial;
+        this.estadisticas = estadisticas;
+        this.habitat = habitat;
+        this.dieta = dieta;
     }
 
-    public void setCladistica(RamaCladistica cladistica) {
-        this.cladistica = cladistica;
-    }*/
-
+    
+    @JsonIgnore
+    @Override
+    public String getNombre(){
+        return super.getNombre();
+    }
+    
     public String getGenero(){
         return this.genero;
     }
@@ -45,7 +67,6 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
     public void setEspecie(String especie){
         this.especie = especie;
     }
-    
     
     public ArrayList<EHabilidadBasica> getHabilidadesBasicas() {
         return habilidadesBasicas;
@@ -87,14 +108,22 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
         this.dieta = dieta;
     }
     
+    
+    @JsonIgnore
+    @Override
+    public Character getCaracterRepresentativo(){
+        return CARACTER_REPRESENTATIVO;
+    }
+    
+    @JsonIgnore
     public void setNumeroColeccion(int numero){
         this.getNumId().setNumeroColeccion(numero);
     }
     
     
     @Override
-    public String obtenerAtributo(IAtributo atributoBuscado) {
-        String retorno = null;
+    public Object obtenerAtributo(IAtributo atributoBuscado) {
+        Object retorno = null;
         
         switch (atributoBuscado) {
             case EAtributoCarta atributoCast -> {
@@ -117,10 +146,10 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
                         retorno = aux;
                     }
                     
-                    case HABILIDAD_ESPECIAL -> this.habilidadEspecial.toString();
-                    case ESTADISTICAS -> this.estadisticas.toString();
-                    case HABITAT -> this.habitat.toString();
-                    case DIETA -> this.dieta.toString();
+                    case HABILIDAD_ESPECIAL -> retorno = this.habilidadEspecial.toString();
+                    case ESTADISTICAS -> retorno = this.estadisticas;
+                    case HABITAT -> retorno = this.habitat.toString();
+                    case DIETA -> retorno = this.dieta.toString();
                 }
             }
             default -> retorno = null;
@@ -129,10 +158,6 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
     }
     
     
-    @Override
-    public Character getCaracterRepresentativo(){
-        return CARACTER_REPRESENTATIVO;
-    }
 
     @Override
     public String aCSV() {
@@ -162,33 +187,41 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
         return retorno;
     }
 
-    @Override
-    public String aJSON() throws JsonProcessingException {
+    /*@Override
+    public String aJSON(){
+        try{
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(this);
         return json;
-    }
+        } catch (JsonProcessingException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }*/
 
     @Override
     public String aTextoDescriptivo() {
-        String retorno = super.aTextoDescriptivo();
-        
+        String retorno = super.aTextoDescriptivo() + "\n";
         
         int numeroHabilidad = 1;
-        for(EHabilidadBasica habilidadB : this.habilidadesBasicas){
-            retorno += "Habilidad basica #" + numeroHabilidad + ": " + habilidadB + "\n";
-            numeroHabilidad++;
+        if(this.habilidadesBasicas != null){
+            for(EHabilidadBasica habilidadB : this.habilidadesBasicas){
+                retorno += "Habilidad basica #" + numeroHabilidad + ": " + habilidadB + "\n";
+                numeroHabilidad++;
+            }
         }
         
-        retorno += this.habilidadEspecial.aTextoDescriptivo();
+        if(this.habilidadEspecial != null){
+            retorno += this.habilidadEspecial.aTextoDescriptivo() + "\n";
+        }
         
-        retorno += estadisticas.aTextoDescriptivo();
+        retorno += estadisticas.aTextoDescriptivo() + "\n";
         
-        retorno += "Habitat: " + habitat.toString() + "\n";
+        retorno += "Habitat: " + habitat.toString() + "\n\n";
         
-        retorno += "Dieta: " + dieta.toString() + "\n";
+        retorno += "Dieta: " + dieta.toString() + "\n\n";
         
-        return retorno;    
+        return retorno;
     }
     
     @Override

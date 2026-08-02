@@ -2,26 +2,83 @@ package com.mycompany.diseniointeligente.Modelos;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  *
  * @author Lorenzo Buero
  */
-public abstract class Sacrificio {
-    public IAtributo atributoDeCarta;
+public class Sacrificio {
     
-    public abstract Boolean calcularValidez(ISacrificable cartaAVerificar);
+    private EOperacionSacrificio operacion;
+    private Object valorBuscado;
+    private IAtributo atributoDeCarta;
     
-    public ArrayList<Carta> obtenerSacrificiosValidos(ArrayList<Carta> cartasAFiltrar) {
-        ArrayList<Carta> retorno = new ArrayList<>();
+    public Sacrificio(EOperacionSacrificio operacion, IAtributo atributoDeCarta, Object valorBuscado){
+        this.operacion = operacion;
+        this.atributoDeCarta = atributoDeCarta;
+        this.valorBuscado = valorBuscado;
+    }
     
-        for(Carta carta : cartasAFiltrar){
-            if(carta instanceof ISacrificable cartaSacrificable){
+    @JsonCreator
+    private Sacrificio(
+            @JsonProperty("operacion") EOperacionSacrificio operacion, 
+            @JsonProperty("atributoDeCarta") String atributoDeCarta, 
+            @JsonProperty("valorBuscado") Object valorBuscado){
+        
+        this.operacion = operacion;
+        this.valorBuscado = valorBuscado;
+    
+        
+        IAtributo atributoIngresado;
+        //esto es así porque "atributoDeCarta" no puede ser una interfaz (IAtributo)
+        //porque si lo fuera JsonProperty no podría asignar el valor al no saber si
+        //es un valor posible, IAtributo es una Interfáz, no un Enum.
+        try{
+            atributoIngresado = EAtributoCarta.valueOf(atributoDeCarta);
+       
+        } catch(IllegalArgumentException _){
+            try{
+            atributoIngresado = EAtributoCriatura.valueOf(atributoDeCarta);
             
-                if(this.calcularValidez(cartaSacrificable)){
-                    retorno.add(carta);
-                }               
+            } catch(IllegalArgumentException _){
+                try{
+                    atributoIngresado = EAtributoEvento.valueOf(atributoDeCarta);
+                    
+                } catch(IllegalArgumentException _){
+                    atributoIngresado = null;
+                }
+            }
+        }
+        
+        this.atributoDeCarta = atributoIngresado;
+    }
+
+    public EOperacionSacrificio getOperacion() {
+        return operacion;
+    }
+
+    public Object getValorBuscado() {
+        return valorBuscado;
+    }
+
+    public IAtributo getAtributoDeCarta() {
+        return atributoDeCarta;
+    }
+    
+    public ArrayList<ISacrificable> obtenerSacrificiosValidos(ArrayList<ISacrificable> sacrificiosAFiltrar) {
+        ArrayList<ISacrificable> retorno = new ArrayList<>();
+    
+        for(ISacrificable sacrificio : sacrificiosAFiltrar){
+            
+            boolean esValido = operacion.compararElementos(this.valorBuscado, 
+                            sacrificio.obtenerAtributo(atributoDeCarta));
+            if(esValido){
+                retorno.add(sacrificio);
             }
         }
         return retorno;
     }
+    
 }

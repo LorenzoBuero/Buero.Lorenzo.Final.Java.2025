@@ -13,7 +13,7 @@
    <children>
       <Button fx:id="btn_editar" layoutX="516.0" layoutY="40.0" mnemonicParsing="false" onAction="#editarCartaSeleccionada" prefHeight="60.0" prefWidth="70.0" text="Editar" />
       <Button fx:id="btn_cartaNueva" layoutX="14.0" layoutY="354.0" mnemonicParsing="false" onAction="#procesoCrearCarta" prefHeight="32.0" prefWidth="200.0" text="Carta Nueva" />
-      <Button fx:id="btn_eliminar" layoutX="516.0" layoutY="119.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="70.0" text="Eliminar" />
+      <Button fx:id="btn_eliminar" layoutX="516.0" layoutY="119.0" mnemonicParsing="false" onAction="#eliminarCartaSeleccionada" prefHeight="60.0" prefWidth="70.0" text="Eliminar" />
       <Button fx:id="btn_filtros" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostrarSelectorFiltros" prefHeight="26.0" prefWidth="200.0" text="Filtros" />
       <Label fx:id="descripcionCarta" alignment="TOP_LEFT" layoutX="227.0" layoutY="27.0" prefHeight="332.0" prefWidth="265.0" text="No hay ninguna carta seleccionada" wrapText="true" />
       <Button fx:id="btn_verImagen" layoutX="257.0" layoutY="357.0" mnemonicParsing="false" onAction="#verImagen" text="ver imagen" />

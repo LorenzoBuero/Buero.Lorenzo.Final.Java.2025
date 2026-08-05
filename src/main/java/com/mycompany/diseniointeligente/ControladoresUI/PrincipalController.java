@@ -208,6 +208,19 @@ public class PrincipalController {
     
     }
     
+    public void eliminarCartaSeleccionada(ActionEvent evento){
+        String mensaje = "¿Estás seguro que querés eliminar la carta " + this.cartaSeleccionada.getNombre() + "?";
+        Integer idAEliminar = this.idSeleccionado;
+        if(idAEliminar != null && pedirConfirmacion(mensaje)){
+            this.gestorCartas.eliminar(idAEliminar);
+            this.actualizarListViewCartas();
+        }
+    }
+    
+    private boolean pedirConfirmacion(String texto){
+        return true;
+    }
+    
     
     private ETipoCarta preguntarTipoCartaACrear() throws IOException{
     

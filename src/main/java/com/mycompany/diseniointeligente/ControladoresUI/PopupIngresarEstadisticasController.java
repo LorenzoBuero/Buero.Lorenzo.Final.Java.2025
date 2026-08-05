@@ -7,11 +7,8 @@ import com.mycompany.diseniointeligente.Modelos.Estadisticas;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+
 
 /**
  * FXML Controller class
@@ -31,8 +28,10 @@ public class PopupIngresarEstadisticasController extends ControladorPopupDeLista
     private Estadisticas estadisticas;
     private Boolean esPrimerEstadistica = true;
 
+    @Override
     public void initialize(){
         this.comida.setDisable(true);
+        super.initialize();
     }
     
     
@@ -78,7 +77,12 @@ public class PopupIngresarEstadisticasController extends ControladorPopupDeLista
     }
     
     @Override
-    public void eliminarSeleccionado(ActionEvent evento){}
+    public void eliminarSeleccionado(ActionEvent evento){
+        if(this.getIdSeleccionado() != null){
+            this.estadisticas.quitarFase(this.getIdSeleccionado());
+            this.actualizarListaVisible();
+        }
+    }
     
     
     private void actualizarDatosAlAgregarEstadisticas(){

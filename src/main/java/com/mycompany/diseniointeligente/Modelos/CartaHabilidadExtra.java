@@ -3,6 +3,7 @@ package com.mycompany.diseniointeligente.Modelos;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mycompany.diseniointeligente.Excepciones.ParametroObligatorioEsNullException;
 import java.util.ArrayList;
 
 
@@ -16,32 +17,39 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
     
     private String efecto = null;
     private String descripcionObjetivos = null;
-    //public RamaCladistica objetivosValidos;// = null;
-    private static final char CARACTER_REPRESENTATIVO = 'H';
+    private static final char CARACTER_REPRESENTATIVO = ETipoCarta.HABILIDAD_EXTRA.tipo;
     
-    public CartaHabilidadExtra(){}
     
-    public CartaHabilidadExtra(String nombre, NumeroIdentificador numId, String efecto){
-        //, RamaCladistica objValidos) {
-        numId.setTipoCarta(CARACTER_REPRESENTATIVO);
-        //this.efecto = efecto;
-        //this.objetivosValidos = objValidos;
-        super(nombre, numId);
+    
+    public CartaHabilidadExtra(String nombre, NumeroIdentificador numId, String efecto)
+        throws ParametroObligatorioEsNullException{
+        
+
+        this(nombre, numId, null, efecto, null);
     }
     
     @JsonCreator
     private CartaHabilidadExtra(
+            @JsonProperty("nombre") String nombreCarta,
             @JsonProperty("numId") NumeroIdentificador numId,
             @JsonProperty("urlImagen") String URL,
-            @JsonProperty("nombre") String nombreCarta,
             @JsonProperty("efecto") String efecto,
-            @JsonProperty("descripcionObjetivos") String descripcionObjetivos){
+            @JsonProperty("descripcionObjetivos") String descripcionObjetivos)
+            throws ParametroObligatorioEsNullException{
     
-        
         super(nombreCarta, numId, URL);
         
         this.efecto = efecto;
         this.descripcionObjetivos = descripcionObjetivos;
+        
+        if(this.getNumId() != null){
+            this.getNumId().setTipoCarta(this.getCaracterRepresentativo());
+        }
+        
+        ArrayList<IAtributo> obligatoriosFaltantes = this.obtenerCamposObligatoriosVacios();
+        if(!obligatoriosFaltantes.isEmpty()){
+            throw new ParametroObligatorioEsNullException(obligatoriosFaltantes);
+        }
     }
     
     public String getEfecto() {
@@ -95,7 +103,7 @@ public final class CartaHabilidadExtra extends Carta implements IParseable{
     
         ArrayList<IAtributo> retorno =  super.obtenerCamposObligatoriosVacios();
         
-        if(this.efecto == null){
+        if(this.efecto == null || this.efecto.isBlank()){
             retorno.add(EAtributoHabilidadExtra.EFECTO);
         }
         

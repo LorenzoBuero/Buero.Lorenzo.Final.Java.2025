@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
- 
+import com.mycompany.diseniointeligente.Excepciones.ParametroObligatorioEsNullException;
 //@author Lorenzo Buero
 
 public final class CartaCriatura extends Carta implements IParseable, ISacrificable{
@@ -17,28 +17,33 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
     EHabitat habitat = null;
     EDieta dieta = null;
 
-    private static final char CARACTER_REPRESENTATIVO = 'H';
+    private static final char CARACTER_REPRESENTATIVO = ETipoCarta.CRIATURA.tipo;
     
-    public CartaCriatura(){}
     
-    public CartaCriatura(String nombre) {
-        super(nombre);
+    public CartaCriatura(String genero, String especie, NumeroIdentificador numId, 
+            Estadisticas estadisticas, EHabitat habitat, EDieta dieta) throws
+            ParametroObligatorioEsNullException{
+        
+        this(genero, especie, numId, null, null, null, estadisticas, habitat, dieta);
     }
     
     @JsonCreator
     private CartaCriatura(
-            @JsonProperty("numId") NumeroIdentificador numId,
-            @JsonProperty("urlImagen") String URL,
             @JsonProperty("genero") String genero, 
             @JsonProperty("especie") String especie, 
+            @JsonProperty("numId") NumeroIdentificador numId,
+            @JsonProperty("urlImagen") String URL,
             @JsonProperty("habilidadesBasicas") ArrayList<EHabilidadBasica> habilidadesBasicas,
             @JsonProperty("habilidadEspecial") HabilidadEspecial habilidadEspecial,
             @JsonProperty("estadisticas") Estadisticas estadisticas,
             @JsonProperty("habitat") EHabitat habitat,
-            @JsonProperty("dieta") EDieta dieta){
+            @JsonProperty("dieta") EDieta dieta) throws
+            ParametroObligatorioEsNullException{
     
         String nombreCarta = genero + " " + especie;
+        
         super(nombreCarta, numId, URL);
+        
         this.genero = genero;
         this.especie = especie;
         this.habilidadesBasicas = habilidadesBasicas;
@@ -46,8 +51,16 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
         this.estadisticas = estadisticas;
         this.habitat = habitat;
         this.dieta = dieta;
+        
+        if(this.getNumId() != null){
+            this.getNumId().setTipoCarta(this.getCaracterRepresentativo());
+        }
+        ArrayList<IAtributo> obligatoriosFaltantes = this.obtenerCamposObligatoriosVacios();
+        if(!obligatoriosFaltantes.isEmpty()){
+            throw new ParametroObligatorioEsNullException(obligatoriosFaltantes);
+        }
     }
-
+    
     
     @JsonIgnore
     @Override
@@ -115,11 +128,11 @@ public final class CartaCriatura extends Carta implements IParseable, ISacrifica
         return CARACTER_REPRESENTATIVO;
     }
     
-    @JsonIgnore
+    /*@JsonIgnore
     public void setNumeroColeccion(int numero){
         this.getNumId().setNumeroColeccion(numero);
     }
-    
+    */
     
     @Override
     public Object obtenerAtributo(IAtributo atributoBuscado) {

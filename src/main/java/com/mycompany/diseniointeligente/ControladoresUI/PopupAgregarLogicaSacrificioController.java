@@ -127,7 +127,7 @@ public class PopupAgregarLogicaSacrificioController extends ControladorPopup{
     }
     
     
-    private IAtributo castearSeleccionado(){
+    private IAtributo castearIAtributoSeleccionado(){
         IAtributo retorno;
         String seleccionado = this.cb_atributoSeleccionado.getValue();
         
@@ -154,7 +154,7 @@ public class PopupAgregarLogicaSacrificioController extends ControladorPopup{
     private boolean calcularSacrificio(){
         boolean retorno = false;
         if(this.datosValidos()){
-            IAtributo atributo = this.castearSeleccionado();
+            IAtributo atributo = this.castearIAtributoSeleccionado();
             
             String valorIngresado = this.valorBuscado.getText();
             
@@ -186,29 +186,83 @@ public class PopupAgregarLogicaSacrificioController extends ControladorPopup{
     
     
     private Boolean datosValidos(){
-        Boolean retorno;
-        
-        IAtributo atributoSeleccionado = this.castearSeleccionado();
-        String valorIngresado = this.valorBuscado.getText();
-        
-        if(atributoSeleccionado == EAtributoCriatura.ESTADISTICAS){
-            try{
-                Integer.valueOf(valorIngresado);
-                retorno = true;
-            } catch(NumberFormatException _){
-                retorno = false;
+        Boolean retorno = false;
+        if(datosRellenados()){
+            
+            IAtributo atributoSeleccionado = this.castearIAtributoSeleccionado();
+            String valorIngresado = this.valorBuscado.getText();
+
+            if(atributoSeleccionado == EAtributoCriatura.ESTADISTICAS){
+                try{
+                    Integer.valueOf(valorIngresado);
+                    retorno = true;
+                } catch(NumberFormatException _){
+                    retorno = false;
+                }
+            }
+            else{
+                retorno = !(atributoSeleccionado == null || valorIngresado.isBlank());
             }
         }
-        else{
-            retorno = !(atributoSeleccionado == null || valorIngresado.isBlank());
-        }
+        
+        
         return retorno;
     }
     
     
+    private boolean datosVacios(){
+        boolean retorno = true;
+        
+        if(this.cb_atributoSeleccionado.getValue() != null){
+            retorno = false;
+        }
+        if(this.cb_comparacion.getValue() != null){
+            retorno = false;
+        }
+        if(this.cb_estadisticasAtributos.getValue() != null){
+            retorno = false;
+        }
+        if(!this.valorBuscado.getText().isBlank()){
+            retorno = false;
+        }
+        
+        return retorno;
+    }
+    
+    private boolean datosRellenados(){
+        boolean retorno = true;
+        
+        if(this.cb_atributoSeleccionado.getValue() == null){
+            retorno = false;
+        }else if( this.cb_atributoSeleccionado.getValue().equals(EAtributoCriatura.ESTADISTICAS.obtenerComoString()) 
+                && this.cb_estadisticasAtributos.getValue() == null){
+            retorno = false;
+        }
+        if(this.cb_comparacion.getValue() == null){
+            retorno = false;
+        } 
+        if(this.valorBuscado.getText().isBlank()){
+            retorno = false;
+        }
+        
+        return retorno;
+    }
+    
+    
+    public void vaciarDatos(ActionEvent evento){
+        this.cb_atributoSeleccionado.setValue(null);
+        this.cb_comparacion.setValue(null);
+        this.cb_estadisticasAtributos.setValue(null);
+        this.cb_estadisticasAtributos.setDisable(true);
+        this.valorBuscado.setText("");
+        this.sacrificio = null;
+    }
+    
     @Override
     public void confirmar(ActionEvent evento){
         if(calcularSacrificio()){
+            super.confirmar(evento);
+        } else if(datosVacios()){
             super.confirmar(evento);
         }
         

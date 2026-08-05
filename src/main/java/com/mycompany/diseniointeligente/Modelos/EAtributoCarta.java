@@ -17,6 +17,7 @@ public enum EAtributoCarta implements IAtributo{
     }
     
     public static EAtributoCarta obtenerComoAtributo(String atributo){
+        if(atributo == null){return null;}
         return switch(atributo){
             case "Carta > Numero Identificador" -> NUM_IDENT;
             case "Carta > Nombre" -> NOMBRE;

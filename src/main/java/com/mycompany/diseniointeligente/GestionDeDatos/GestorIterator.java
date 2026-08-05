@@ -26,4 +26,8 @@ public class GestorIterator<T extends IParseable> implements Iterator<T> {
     public T next() {
         return lista.get(indice++);
     }
+    
+    public int posicionActual(){
+        return this.indice;
+    }
 }

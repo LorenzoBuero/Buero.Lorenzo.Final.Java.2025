@@ -18,8 +18,7 @@ public class PopupAgregarHabilidadesBasicasController extends ControladorPopupDe
 
     private ArrayList<EHabilidadBasica> habilidades;
     
-    
-    
+    @Override
     public void initialize(){
         this.habilidades = new ArrayList<>();
         
@@ -30,6 +29,8 @@ public class PopupAgregarHabilidadesBasicasController extends ControladorPopupDe
         }
         
         cb_habilidadesBasicas.getItems().addAll(tiposEnString);
+        
+        super.initialize();
         
     }
 
@@ -51,7 +52,7 @@ public class PopupAgregarHabilidadesBasicasController extends ControladorPopupDe
     
     
     
-    private Boolean asignarTipoSeleccionado(){
+    private boolean asignarTipoSeleccionado(){
          
         if(this.cb_habilidadesBasicas.getValue() == null){
             return false;
@@ -60,20 +61,27 @@ public class PopupAgregarHabilidadesBasicasController extends ControladorPopupDe
             String valor = this.cb_habilidadesBasicas.getValue();
             
             EHabilidadBasica habilidadSeleccionada = EHabilidadBasica.aEHabilidadBasica(valor);
-            this.habilidades.add(habilidadSeleccionada);
+            if(!this.habilidades.contains(habilidadSeleccionada)){
+                this.habilidades.add(habilidadSeleccionada);
+            }
             return true;
         } 
     }
     
     @Override
     public void agregarALista(ActionEvent evento){
-        if(this.asignarTipoSeleccionado()){
-            this.actualizarListaVisible();
-        }
+        this.asignarTipoSeleccionado();
+        this.actualizarListaVisible();
+        
     }
     
     @Override
-    public void eliminarSeleccionado(ActionEvent evento){}
+    public void eliminarSeleccionado(ActionEvent evento){
+        if(this.getIdSeleccionado() != null){
+            habilidades.remove(this.getIdSeleccionado().intValue());
+            this.actualizarListaVisible();
+        }
+    }
     
     @Override
     public void actualizarListaVisible(){

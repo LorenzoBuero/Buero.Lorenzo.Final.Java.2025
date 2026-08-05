@@ -32,6 +32,7 @@ public enum EAtributoEstadisticas implements IAtributo{
     }
     
     public static EAtributoEstadisticas obtenerComoAtributo(String atributo){
+        if(atributo == null){return null;}
         return switch(atributo){
             case "Primer vida" -> PRIMER_VIDA;
             case "Primer ataque" -> PRIMER_ATAQUE;

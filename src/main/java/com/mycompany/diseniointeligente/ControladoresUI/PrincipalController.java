@@ -1,6 +1,7 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
 import com.mycompany.diseniointeligente.GestionDeDatos.Gestor;
+import com.mycompany.diseniointeligente.GestionDeDatos.GestorIterator;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.CartaCriatura;
 import com.mycompany.diseniointeligente.Modelos.CartaEvento;
@@ -27,6 +28,8 @@ public class PrincipalController {
 
     
     private Carta cartaSeleccionada = null;
+    private Integer idSeleccionado = null;
+    
     
     @FXML
     private Button btn_guardarCartas;
@@ -44,7 +47,7 @@ public class PrincipalController {
     private ListView<Carta> listaCartas;
     
     private Gestor<Carta> gestorCartas = new Gestor<>(Carta.class);
-    
+    private GestorIterator<Carta> iterador = this.gestorCartas.iterator();
     
     public void initialize(){
         this.actualizarControladores();
@@ -71,14 +74,17 @@ public class PrincipalController {
         });
     
         
-        this.listaCartas.getSelectionModel().selectedItemProperty().addListener((observable, anteriorCartaSelecciondad, cartaSeleccionadaActualmente) -> {
-            
+        this.listaCartas.getSelectionModel().selectedItemProperty().addListener((
+                observable, anteriorCartaSelecciondad, cartaSeleccionadaActualmente) -> {
+            //cartaSeleccionadaActualmente.
             if(cartaSeleccionadaActualmente != null){
                 this.cartaSeleccionada = cartaSeleccionadaActualmente;
+                this.idSeleccionado = this.listaCartas.getFocusModel().getFocusedIndex();
             }
             this.actualizarControladores();
-        
+            
         }); 
+        
     }
     
     public void mostrarSelectorFiltros(ActionEvent evento){}
@@ -99,6 +105,7 @@ public class PrincipalController {
             Stage escenario = new Stage();
 
             Scene escena = new Scene(objetivo);
+            //this.iterador.
 
             escenario.setScene(escena);
             escenario.show();
@@ -151,7 +158,7 @@ public class PrincipalController {
         try{
             ETipoCarta tipoACrear = this.preguntarTipoCartaACrear();
             
-            Carta cartaCreada = mostrarEditorDeCartas(tipoACrear);
+            Carta cartaCreada = mostrarEditorDeCartas(tipoACrear, false);
             
             
             if(cartaCreada != null){
@@ -162,11 +169,44 @@ public class PrincipalController {
             }
             
             
-        } catch (Exception ex){
-            System.out.println(ex.getLocalizedMessage());
+        } catch (IOException ex){
+            System.out.println(ex.getMessage());
         }
     }
     
+    public void editarCartaSeleccionada(ActionEvent evento){
+        
+        try{
+            Integer idAEditar = this.idSeleccionado;
+            
+            ETipoCarta tipoAEditar;
+            switch(this.cartaSeleccionada){
+                case CartaCriatura _-> tipoAEditar = ETipoCarta.CRIATURA;
+                case CartaEvento _-> tipoAEditar = ETipoCarta.EVENTO;
+                case CartaHabilidadExtra _-> tipoAEditar = ETipoCarta.HABILIDAD_EXTRA;
+                default -> throw new IllegalArgumentException("Valores imposibles, este es un error provisional");
+            }
+            
+            Carta cartaEditada = mostrarEditorDeCartas(tipoAEditar, true);
+            
+            
+            if(cartaEditada != null){
+                System.out.println(cartaEditada.getNombre());
+                this.gestorCartas.actualizar(idAEditar, cartaEditada);
+                this.actualizarListViewCartas();
+                this.cartaSeleccionada = cartaEditada;
+                this.actualizarControladores();
+            }
+            
+            
+        } catch (IOException ex){
+            System.out.println(ex.getMessage());
+        } catch (IllegalArgumentException ex){
+            System.out.println(ex.getMessage());
+        }
+    
+    
+    }
     
     
     private ETipoCarta preguntarTipoCartaACrear() throws IOException{
@@ -190,7 +230,7 @@ public class PrincipalController {
 
     }
     
-    private Carta mostrarEditorDeCartas(ETipoCarta tipoDeCarta) throws IOException{
+    private Carta mostrarEditorDeCartas(ETipoCarta tipoDeCarta, boolean editandoCarta) throws IOException{
         
         String nombreEditor;
         
@@ -206,7 +246,17 @@ public class PrincipalController {
         FXMLLoader cargador = new FXMLLoader(getClass().getResource("/com/mycompany/diseniointeligente/Escenas/" + nombreEditor + ".fxml"));
         Parent objetivo = cargador.load();
 
-        IEditorDeCartas controlador = cargador.getController();
+        EditorCartaController controlador = cargador.getController();
+        
+        
+        if(editandoCarta){
+            controlador.ingresarCartaAEditar(this.cartaSeleccionada);
+        }else{
+            controlador.setNumeroCarta(34);
+        }
+        
+        
+        //controlador.ocultarAvisosCamposObligatoriosVacios();
 
         Stage escenario = new Stage();
 
@@ -215,8 +265,11 @@ public class PrincipalController {
         escenario.setScene(escena);
         escenario.showAndWait();
 
-        Carta cartaRetornada = controlador.getCartaCreada();
+        Carta cartaRetornada = null;
         
+        if(controlador.getGuardarCambios()){
+            cartaRetornada = controlador.getCartaCreada();
+        }
         
         return cartaRetornada;
     }

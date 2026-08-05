@@ -1,7 +1,11 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
+import com.mycompany.diseniointeligente.Modelos.EColecciones;
+import com.mycompany.diseniointeligente.Excepciones.ParametroObligatorioEsNullException;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.CartaCriatura;
+import com.mycompany.diseniointeligente.Modelos.EAtributoCarta;
+import com.mycompany.diseniointeligente.Modelos.EAtributoCriatura;
 import com.mycompany.diseniointeligente.Modelos.EDieta;
 import com.mycompany.diseniointeligente.Modelos.EHabilidadBasica;
 import com.mycompany.diseniointeligente.Modelos.EHabitat;
@@ -10,11 +14,13 @@ import com.mycompany.diseniointeligente.Modelos.Estadisticas;
 import com.mycompany.diseniointeligente.Modelos.HabilidadEspecial;
 import com.mycompany.diseniointeligente.Modelos.IAtributo;
 import com.mycompany.diseniointeligente.Modelos.NumeroIdentificador;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +28,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.WritableImage;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -33,7 +41,7 @@ import javax.imageio.ImageIO;
 
 public class EditorCriaturaController extends EditorCartaController implements IEditorDeCartas{
 
-    private CartaCriatura cartaCreada = null;
+    private CartaCriatura cartaAGuardar = null;
     
     @FXML
     public TextField genero;
@@ -44,9 +52,15 @@ public class EditorCriaturaController extends EditorCartaController implements I
     @FXML
     public ChoiceBox<EDieta> cb_selectorDieta;
     @FXML
-    public Button agregarHabsDef;
+    Label lbl_errorGeneroEspecie;
     @FXML
-    public TextArea habPers;
+    Label lbl_errorColeccion;
+    @FXML
+    Label lbl_errorDieta;
+    @FXML
+    Label lbl_errorHabitat;
+    @FXML
+    Label lbl_errorEstadisticas;
     
     private ArrayList<EHabilidadBasica> habilidadesBasicasIngresadas;
     private HabilidadEspecial habilidadEspecialIngresada;
@@ -57,18 +71,51 @@ public class EditorCriaturaController extends EditorCartaController implements I
         
         EDieta[] tiposEnEnumDieta = EDieta.values();
         cb_selectorDieta.getItems().addAll(tiposEnEnumDieta);
-        
+   
         EHabitat[] tiposEnEnumHabitat = EHabitat.values();
         cb_selectorHabitat.getItems().addAll(tiposEnEnumHabitat);
-        
+
         super.initialize();
     }
+    
+    public EditorCriaturaController(){
+        
+        
+    }
+    
     
     
     @Override
     public CartaCriatura getCartaCreada() {
-        return this.cartaCreada;
+        return this.cartaAGuardar;
     }
+    @Override
+    public void ingresarCartaAEditar(Carta carta){
+        if(carta instanceof CartaCriatura CC){
+            
+            
+            this.especie.setText(CC.getEspecie());
+            this.genero.setText(CC.getGenero());
+            this.cb_idColeccion.setValue(EColecciones.valueOf(CC.getNumId().getNumeroColeccion()));
+            this.cb_selectorDieta.setValue(CC.getDieta());
+            this.cb_selectorHabitat.setValue(CC.getHabitat());
+            this.estadisticasIngresadas = CC.getEstadisticas();
+            
+            this.habilidadEspecialIngresada = CC.getHabilidadEspecial();
+            this.habilidadesBasicasIngresadas = CC.getHabilidadesBasicas();
+            this.setURLImagen(CC.getUrlImagen());
+            
+            this.reasignarImagen();
+            
+        } else {
+            throw new IllegalArgumentException("La carta debe ser una CartaCriatura, no una de otro tipo.");
+        }
+    }
+    
+    private void guardarCarta(CartaCriatura cartaCriatura){
+        this.cartaAGuardar = cartaCriatura;
+    }
+    
 
     @Override
     public ETipoCarta obtenerTipoDeCarta() {
@@ -151,7 +198,7 @@ public class EditorCriaturaController extends EditorCartaController implements I
             escenario.showAndWait();
 
             HabilidadEspecial habilidadActualizada = controlador.getHabilidad();
-            if(habilidadActualizada != null){
+            if(controlador.getGuardarEstosDatos()){
                 this.habilidadEspecialIngresada = habilidadActualizada;
             }
             
@@ -164,65 +211,63 @@ public class EditorCriaturaController extends EditorCartaController implements I
     
     @Override
     public void intentarCrearCarta(){
-        CartaCriatura cartaNueva = new CartaCriatura();
         
-        //NUMERO DE COLECCION
-        if(this.idColeccionSeleccionada()){
-            int numColeccion = this.cb_idColeccion.getValue().numero;
-            NumeroIdentificador numIdent = new NumeroIdentificador(cartaNueva.getCaracterRepresentativo(), numColeccion);
-            cartaNueva.setNumId(numIdent);
-        }
         
-        //NOMBRE    GENERO    ESPECIE
-        if(this.camposNombreFueronLlenados()){
-            String especieIngresada = this.especie.getText().trim();
+        CartaCriatura cartaNueva = null;
+        try { 
             String generoIngresado = this.genero.getText().trim();
+            String especieIngresada = this.especie.getText().trim();
             
-            cartaNueva.setGenero(generoIngresado);
-            cartaNueva.setEspecie(especieIngresada);
-            
-            String nombre = generoIngresado + " " + especieIngresada;
-            
-            cartaNueva.setNombre(nombre);
-        } 
+            NumeroIdentificador numId = this.formarNumId();
+            cartaNueva = new CartaCriatura(
+                    generoIngresado, especieIngresada, numId, estadisticasIngresadas,
+                    this.cb_selectorHabitat.getValue(), this.cb_selectorDieta.getValue());
         
-        //DIETA
-        if(this.dietaFueSeleccionada()){
-            cartaNueva.setDieta(this.cb_selectorDieta.getValue());
-        }
-        
-        //HABITAT
-        if(this.habitatFueSeleccionado()){
-            cartaNueva.setHabitat(this.cb_selectorHabitat.getValue());
+        } catch (ParametroObligatorioEsNullException ex) {
+            
+            ArrayList<IAtributo>camposFaltantes = ex.getCamposRequeridos();
+            this.mostrarAvisosCamposObligatoriosVacios(camposFaltantes);
+            
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
         }
 
-        //ESTADISTICAS
-        if(this.estadisticasFueronLlenadas()){
-            cartaNueva.setEstadisticas(estadisticasIngresadas);
-        }
-        
-        //HABILIDADES BASICAS
-        if(this.habilidadesBasicasFueronSeleccionadas()){
-            cartaNueva.setHabilidadesBasicas(habilidadesBasicasIngresadas);
-        }
-        
-        //HABILIDAD ESPECIAL
-        if(this.habilidadEspecialFueLlenada()){
-            cartaNueva.setHabilidadEspecial(habilidadEspecialIngresada);
-        }
-        
-        //IMAGEN
-        if(this.imagenFueIngresada()){
+        if(cartaNueva != null){
+            //HABILIDADES BASICAS
+            if(this.habilidadesBasicasIngresadas != null){
+                cartaNueva.setHabilidadesBasicas(habilidadesBasicasIngresadas);
+            }
+
+            //HABILIDAD ESPECIAL
+            if(this.habilidadEspecialIngresada != null){
+                cartaNueva.setHabilidadEspecial(habilidadEspecialIngresada);
+            }
             
-            this.guardarImagenDeCarta(cartaNueva);
+            //IMAGEN
+            if(this.getImagenObtenida() != null){
+                this.guardarImagenDeCarta(cartaNueva);
+            }
+
+            if(this.getURLImagen() != null && !(this.getURLImagen().isBlank())){
+                cartaNueva.setUrlImagen(this.getURLImagen());
+            }
+            
+            this.guardarCarta(cartaNueva);
         }
-        
-        this.cartaCreada = cartaNueva;
     }
     
     @Override
-    public void mostrarAvisoCamposObligatoriosVacios(ArrayList<IAtributo> atributosObligatorios){
-    
+    public void mostrarAvisosCamposObligatoriosVacios(ArrayList<IAtributo> atributosObligatorios){
+        for(IAtributo faltante : atributosObligatorios){
+                switch(faltante){
+                    case EAtributoCarta.NOMBRE -> this.lbl_errorGeneroEspecie.setVisible(true);
+                    case EAtributoCarta.NUM_IDENT -> this.lbl_errorColeccion.setVisible(true);
+                    case EAtributoCriatura.ESTADISTICAS -> this.lbl_errorEstadisticas.setVisible(true);
+                    case EAtributoCriatura.DIETA -> this.lbl_errorDieta.setVisible(true);
+                    case EAtributoCriatura.HABITAT -> this.lbl_errorHabitat.setVisible(true);
+                    default -> System.out.println(faltante);
+                }
+            }
     }
     
     @Override 
@@ -230,82 +275,15 @@ public class EditorCriaturaController extends EditorCartaController implements I
         this.intentarCrearCarta();
         super.continuar(evento);
     }
-    
-    
-    
-    private boolean camposNombreFueronLlenados(){
-        String especieIngresada = this.especie.getText();
-        String generoIngresado = this.genero.getText();
-        
-        Boolean retorno = true;
-        
-        if(especieIngresada.isBlank() || generoIngresado.isBlank()){
-            retorno = false;
-        }
-        
-        return retorno;
+
+    @Override
+    public void ocultarAvisosCamposObligatoriosVacios() {
+        this.lbl_errorGeneroEspecie.setVisible(false);
+        this.lbl_errorColeccion.setVisible(false);
+        this.lbl_errorEstadisticas.setVisible(false);
+        this.lbl_errorDieta.setVisible(false);
+        this.lbl_errorHabitat.setVisible(false);    
     }
     
-    private boolean habitatFueSeleccionado(){
-        Boolean retorno = true;
-        
-        if(this.cb_selectorHabitat.getValue() == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean dietaFueSeleccionada(){
-        Boolean retorno = true;
-        
-        if(this.cb_selectorDieta.getValue() == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean imagenFueIngresada(){
-        Boolean retorno = true;
     
-        if(this.getImagenObtenida() == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean estadisticasFueronLlenadas(){
-        Boolean retorno = true;
-        
-        if(this.estadisticasIngresadas == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean habilidadesBasicasFueronSeleccionadas(){
-        Boolean retorno = true;
-        
-        if(this.habilidadesBasicasIngresadas == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean habilidadEspecialFueLlenada(){
-        Boolean retorno = true;
-        
-        if(this.habilidadEspecialIngresada == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean idColeccionSeleccionada(){
-        Boolean retorno = true;
-        
-        if(this.cb_idColeccion.getValue() == null){
-            retorno = false;
-        }
-        return retorno;
-    }
 }

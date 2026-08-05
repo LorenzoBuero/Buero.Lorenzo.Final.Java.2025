@@ -35,6 +35,18 @@ public class Estadisticas implements IParseable{
         this.requisitoCrecimiento.add(coste);
     }
     
+    public void quitarFase(int posicion){
+        if(posicion > 0 && posicion < this.getCantidadEstadisticas()){
+            this.progresoAtaqueVida.remove(posicion);
+            this.requisitoCrecimiento.remove(posicion);
+        } else if(posicion == 0){
+            if(this.getCantidadEstadisticas() == 1){
+                this.progresoAtaqueVida.remove(posicion);
+                this.requisitoCrecimiento.remove(posicion);
+            }
+        }
+    }
+    
     @JsonIgnore
     public int getCantidadEstadisticas(){
         return this.progresoAtaqueVida.size();

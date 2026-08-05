@@ -11,10 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentificador>{
 
     
-    
-    private char tipoCarta;
-    private int numeroColeccion;
-    private int numeroCarta;
+    private Integer numeroColeccion;
+    private Character tipoCarta;
+    private Integer numeroCarta;
     
     private final String DIVISOR = "-";
     
@@ -22,23 +21,19 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
     
     @JsonCreator
     public NumeroIdentificador(
-            @JsonProperty("tipoCarta") char tipoCarta, 
             @JsonProperty("numeroColeccion") int numeroColeccion, 
+            @JsonProperty("tipoCarta") Character tipoCarta, 
             @JsonProperty("numeroCarta") int numeroCarta){
-        this.tipoCarta = tipoCarta;
+        
         this.numeroColeccion = numeroColeccion;
+        this.tipoCarta = tipoCarta;
         this.numeroCarta = numeroCarta;
     }
     
-    public NumeroIdentificador(int numeroColeccion, int numeroCarta){
-        this.numeroColeccion = numeroColeccion;
-        this.numeroCarta = numeroCarta;
+    public NumeroIdentificador(EColecciones coleccion, int numeroCarta){
+        this(coleccion.numero, null, numeroCarta);
     }
     
-    public NumeroIdentificador(char tipoCarta, int numeroColeccion){
-        this.numeroColeccion = numeroColeccion;
-        this.tipoCarta = tipoCarta;
-    }
     
     public NumeroIdentificador(String numID){
 
@@ -52,18 +47,18 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
     }
 
     
-    public char getTipoCarta() {
+    public Character getTipoCarta() {
         return tipoCarta;
     }
     
-    public void setTipoCarta(char tipo) {
+    public void setTipoCarta(Character tipo) {
         this.tipoCarta = tipo;
     }
 
-    public String getNumeroColeccion() {
-        return String.valueOf(numeroColeccion);
+    public Integer getNumeroColeccion() {
+        return numeroColeccion;
     } 
-    public void setNumeroColeccion(int numero){
+    private void setNumeroColeccion(int numero){
         this.numeroColeccion = numero;
     }
 
@@ -83,6 +78,22 @@ public class NumeroIdentificador implements IParseable, Comparable<NumeroIdentif
         retorno = retorno + this.getNumeroColeccion();
         retorno = retorno + DIVISOR;
         retorno = retorno + this.getNumeroCarta();
+        
+        return retorno;
+    }
+    
+    public boolean valoresIncompletos(){
+        boolean retorno = false;
+        
+        if(this.numeroColeccion == null || this.numeroColeccion < 0){
+            retorno = true;
+        }
+        if(this.tipoCarta == null){
+            retorno = true;
+        }
+        if(this.numeroCarta == null || this.numeroCarta < 0){
+            retorno = true;
+        }
         
         return retorno;
     }

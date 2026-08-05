@@ -25,6 +25,7 @@ public enum EAtributoCriatura implements IAtributo{
     }
     
     public static EAtributoCriatura obtenerComoAtributo(String atributo){
+        if(atributo == null){return null;}
         return switch(atributo){
             case "Criatura > Habilidades basicas" -> HABILIDADES_BASICAS;
             case "Criatura > Habilidad especial" -> HABILIDAD_ESPECIAL;

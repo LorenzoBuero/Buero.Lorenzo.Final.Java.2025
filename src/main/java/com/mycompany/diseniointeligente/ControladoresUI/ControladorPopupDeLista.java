@@ -28,7 +28,23 @@ public abstract class ControladorPopupDeLista extends ControladorPopup{
     public Button btn_eliminarSeleccionado;
     @FXML 
     public ListView<String> listaVisible;
-   
+    
+    private Integer idSeleccionado = null;
+    public Integer getIdSeleccionado(){
+        return this.idSeleccionado;
+    }
+    
+    public void initialize(){
+        this.listaVisible.getSelectionModel().selectedItemProperty().addListener((
+                observable, anteriorSeleccionado, seleccionadoActualmente) -> {
+            //cartaSeleccionadaActualmente.
+            if(seleccionadoActualmente != null){
+                this.idSeleccionado = this.listaVisible.getFocusModel().getFocusedIndex();
+            }
+            
+        });
+    }
+    
     
     public abstract void agregarALista(ActionEvent evento);
     

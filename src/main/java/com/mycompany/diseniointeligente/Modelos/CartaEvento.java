@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.mycompany.diseniointeligente.Excepciones.ParametroObligatorioEsNullException;
 import java.util.ArrayList;
 
 /**
@@ -14,34 +15,46 @@ import java.util.ArrayList;
  */
 public final class CartaEvento extends Carta implements IParseable, ISacrificable{
 
-    private String efecto = null;
+    private String efecto;
     private String descripcionSacrificio = null;
     private Sacrificio sacrificio = null;
     
-    private static final char CARACTER_REPRESENTATIVO = 'E';
+    private static final char CARACTER_REPRESENTATIVO = ETipoCarta.EVENTO.tipo;
     
     
-    public CartaEvento(){}
     
-    public CartaEvento(String nombre) {
-        super(nombre);
+    
+    public CartaEvento(String nombre, NumeroIdentificador numId, String efecto) throws 
+            ParametroObligatorioEsNullException{
+        
+        this(nombre, numId, "", efecto, null, null);
     }
     
     @JsonCreator
-    private CartaEvento(@JsonProperty("numId") NumeroIdentificador numId,
+    private CartaEvento(@JsonProperty("nombre") String nombreCarta,
+            @JsonProperty("numId") NumeroIdentificador numId,
             @JsonProperty("urlImagen") String URL,
-            @JsonProperty("nombre") String nombreCarta,
             @JsonProperty("efecto") String efecto,
             @JsonProperty("descripcionSacrificio") String descripcionSacrificio,
-            @JsonProperty("sacrificio") Sacrificio sacrificio){
+            @JsonProperty("sacrificio") Sacrificio sacrificio) throws 
+            ParametroObligatorioEsNullException{
     
-        
         super(nombreCarta, numId, URL);
         
-        this.efecto = efecto;
         this.descripcionSacrificio = descripcionSacrificio;
         this.sacrificio = sacrificio;
+        this.efecto = efecto;
+        
+        if(this.getNumId() != null){
+            this.getNumId().setTipoCarta(this.getCaracterRepresentativo());
+        }
+        
+        ArrayList<IAtributo> obligatoriosFaltantes = this.obtenerCamposObligatoriosVacios();
+        if(!obligatoriosFaltantes.isEmpty()){
+            throw new ParametroObligatorioEsNullException(obligatoriosFaltantes);
+        }
     }
+    
     
     
     public void setEfecto(String efecto){
@@ -94,7 +107,7 @@ public final class CartaEvento extends Carta implements IParseable, ISacrificabl
     
         ArrayList<IAtributo> retorno =  super.obtenerCamposObligatoriosVacios();
         
-        if(this.efecto == null){
+        if(this.efecto == null || this.efecto.isBlank()){
             retorno.add(EAtributoEvento.EFECTO);
         }
         

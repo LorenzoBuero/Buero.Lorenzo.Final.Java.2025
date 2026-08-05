@@ -45,7 +45,7 @@ public class Gestor<T extends IParseable> implements CRUD<T>, IParseable{
         elementos.remove(indice);
     }
     
-    public Iterator<T> iterator() {
+    public GestorIterator<T> iterator() {
         return new GestorIterator<>(elementos);
     }
 

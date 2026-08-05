@@ -17,6 +17,7 @@ public enum EAtributoEvento implements IAtributo{
     }
     
     public static EAtributoEvento obtenerComoAtributo(String atributo){
+        if(atributo == null){return null;}
         return switch(atributo){
             case "Evento > Efecto" -> EFECTO;
             case "Evento > Descripcion del sacrificio" -> DESCRIPCION_SACRIFICIO;

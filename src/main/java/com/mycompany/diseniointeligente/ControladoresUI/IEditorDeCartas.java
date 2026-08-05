@@ -15,10 +15,6 @@ import javafx.stage.Stage;
  */
 public abstract interface IEditorDeCartas{
     
-    public abstract Carta getCartaCreada();
     
-    public abstract ETipoCarta obtenerTipoDeCarta();
-    
-    public abstract void intentarCrearCarta();
      
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.ArrayList;
 
 
-
 //@author Lorenzo Buero
  
 
@@ -26,27 +25,12 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
     private String nombre;
     private String urlImagen;
     
-    public Carta(){}
     
-    public Carta(String nombre){
+    public Carta(String nombre, NumeroIdentificador numId, String URL) {
+        
+        this.numId = numId;
         this.nombre = nombre;
-    }
-    
-    public Carta(String nombre, NumeroIdentificador numId){
-        this.numId = numId;   
-        this(nombre);
-    }
-    
-    public Carta(String nombre, NumeroIdentificador numId, String URL){
-        this.numId = numId;   
         this.urlImagen = URL;
-        this(nombre);
-    }
-    
-    
-    public Carta(String nombre, char tipoCarta, int numeroDeCarta, int numeroDeColeccion){
-        NumeroIdentificador numID = new NumeroIdentificador(tipoCarta, numeroDeCarta, numeroDeColeccion);
-        this(nombre, numID);
     }
     
     public abstract Character getCaracterRepresentativo();
@@ -74,8 +58,6 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
     public void setUrlImagen(String url){
         this.urlImagen = url;
     }
-    
-    
     
     public boolean equals(Carta carta){
         boolean retorno = false;
@@ -106,10 +88,10 @@ public sealed abstract class Carta implements Comparable<Carta>, IParseable perm
     
         ArrayList<IAtributo> retorno = new ArrayList<>();
         
-        if(this.getNombre() == null){
+        if(this.getNombre() == null || this.getNombre().isBlank()){
             retorno.add(EAtributoCarta.NOMBRE);
         }
-        if(this.getNumId() == null){
+        if(this.getNumId() == null || this.getNumId().valoresIncompletos()){
             retorno.add(EAtributoCarta.NUM_IDENT);
         }
         return retorno;

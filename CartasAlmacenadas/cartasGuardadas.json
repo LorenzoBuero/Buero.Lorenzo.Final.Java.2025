@@ -1,29 +1,29 @@
 [ {
   "tipo" : "Evento",
+  "nombre" : "Frio Intenso",
   "numId" : {
+    "numeroColeccion" : 1,
     "tipoCarta" : "E",
-    "numeroColeccion" : "1",
     "numeroCarta" : "0"
   },
   "urlImagen" : "Img_Frio Intenso.png",
-  "nombre" : "Frio Intenso",
   "efecto" : "Todos los animalitos tienen frio xddd",
   "descripcionSacrificio" : "Todos los animalitos tienen frio xddd",
   "sacrificio" : {
     "operacion" : "IGUALDAD",
-    "valorBuscado" : "Diplodocus Facheris",
-    "atributoDeCarta" : "NOMBRE"
+    "atributoDeCarta" : "NOMBRE",
+    "valorBuscado" : "Diplodocus Facheris"
   }
 }, {
   "tipo" : "Criatura",
+  "genero" : "Diplodocus",
+  "especie" : "Facheris",
   "numId" : {
-    "tipoCarta" : "H",
-    "numeroColeccion" : "1",
+    "numeroColeccion" : 1,
+    "tipoCarta" : "C",
     "numeroCarta" : "0"
   },
   "urlImagen" : "Img_Diplodocus Facheris.png",
-  "genero" : "Diplodocus",
-  "especie" : "Facheris",
   "habilidadesBasicas" : null,
   "habilidadEspecial" : {
     "nombre" : "Latigazo",
@@ -45,19 +45,16 @@
   "dieta" : "HERBIVORO"
 }, {
   "tipo" : "Criatura",
+  "genero" : "Irritator",
+  "especie" : "Challengeri",
   "numId" : {
-    "tipoCarta" : "H",
-    "numeroColeccion" : "1",
+    "numeroColeccion" : 1,
+    "tipoCarta" : "C",
     "numeroCarta" : "0"
   },
   "urlImagen" : "Img_aa bb.png",
-  "genero" : "bb",
-  "especie" : "aa",
   "habilidadesBasicas" : [ "NADAR", "GARRAZO" ],
-  "habilidadEspecial" : {
-    "nombre" : "asdcawcx",
-    "habilidad" : "ccccccccc"
-  },
+  "habilidadEspecial" : null,
   "estadisticas" : {
     "progresoAtaqueVida" : [ {
       "ataque" : 4,
@@ -79,13 +76,24 @@
   "dieta" : "CARNIVORO"
 }, {
   "tipo" : "Habilidad Extra",
+  "nombre" : "Plumines",
   "numId" : {
+    "numeroColeccion" : 1,
     "tipoCarta" : "H",
-    "numeroColeccion" : "1",
     "numeroCarta" : "0"
   },
   "urlImagen" : "Img_Plumines.png",
-  "nombre" : "Plumines",
   "efecto" : "plumissssssssssssssssssssss",
   "descripcionObjetivos" : "plumissssssssssssssssssssss"
+}, {
+  "tipo" : "Habilidad Extra",
+  "nombre" : "Armadura",
+  "numId" : {
+    "numeroColeccion" : 1,
+    "tipoCarta" : "H",
+    "numeroCarta" : "34"
+  },
+  "urlImagen" : null,
+  "efecto" : "-40% de daño recibido",
+  "descripcionObjetivos" : null
 } ]

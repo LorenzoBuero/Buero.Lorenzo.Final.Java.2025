@@ -47,6 +47,15 @@ public class PopupAgregarHabilidadEspecialController extends ControladorPopup{
         return retorno;
     }
     
+    private Boolean datosVacios(){
+    
+        String nombreTB = this.nombreHabilidad.getText();
+        String descripcionTB = this.descripcionHabilidad.getText();
+        
+        Boolean retorno = (nombreTB.isBlank() && descripcionTB.isBlank());
+        return retorno;
+    }
+    
     private void asignarValores(){
         if(datosValidos()){
             String nombre = nombreHabilidad.getText();
@@ -60,6 +69,9 @@ public class PopupAgregarHabilidadEspecialController extends ControladorPopup{
     public void confirmar(ActionEvent evento){
         if(datosValidos()){
             this.asignarValores();
+            super.confirmar(evento);
+        } else if(datosVacios()){
+            this.habilidadEspecial = null;
             super.confirmar(evento);
         }
     }

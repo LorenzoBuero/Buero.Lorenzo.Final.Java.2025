@@ -19,5 +19,6 @@
       <Button fx:id="btn_continuar" layoutX="325.0" layoutY="192.0" mnemonicParsing="false" onAction="#confirmar" text="Continuar" />
       <ChoiceBox fx:id="cb_comparacion" layoutX="190.0" layoutY="93.0" prefHeight="26.0" prefWidth="72.0" />
       <ChoiceBox fx:id="cb_estadisticasAtributos" layoutX="44.0" layoutY="125.0" prefHeight="26.0" prefWidth="122.0" />
+      <Button layoutX="180.0" layoutY="57.0" mnemonicParsing="false" onAction="#vaciarDatos" text="vaciar datos" />
    </children>
 </AnchorPane>

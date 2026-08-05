@@ -12,6 +12,7 @@ module com.mycompany.diseniointeligente {
     
     exports com.mycompany.diseniointeligente;
     exports com.mycompany.diseniointeligente.Modelos;
+    exports com.mycompany.diseniointeligente.Excepciones;
     
     
 }

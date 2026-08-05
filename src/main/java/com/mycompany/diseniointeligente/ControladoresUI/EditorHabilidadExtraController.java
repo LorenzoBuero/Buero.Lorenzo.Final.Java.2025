@@ -1,7 +1,11 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
+import com.mycompany.diseniointeligente.Modelos.EColecciones;
+import com.mycompany.diseniointeligente.Excepciones.ParametroObligatorioEsNullException;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.CartaHabilidadExtra;
+import com.mycompany.diseniointeligente.Modelos.EAtributoCarta;
+import com.mycompany.diseniointeligente.Modelos.EAtributoHabilidadExtra;
 import com.mycompany.diseniointeligente.Modelos.ETipoCarta;
 import com.mycompany.diseniointeligente.Modelos.IAtributo;
 import com.mycompany.diseniointeligente.Modelos.NumeroIdentificador;
@@ -10,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javax.imageio.ImageIO;
 
@@ -22,63 +27,93 @@ import javax.imageio.ImageIO;
 public class EditorHabilidadExtraController extends EditorCartaController implements IEditorDeCartas {
     
     @FXML
-    public TextArea efecto;
+    TextArea efecto;
     @FXML
-    public TextArea descripcionObjetivos;
+    TextArea descripcionObjetivos;
+    @FXML
+    Label lbl_errorNombre;
+    @FXML
+    Label lbl_errorColeccion;
+    @FXML
+    Label lbl_errorEfecto;
     
+    private Carta cartaAGuardar = null;
     
-    private Carta cartaCreada = null;
-    
-
-    @Override
-    public void intentarCrearCarta(){
-        CartaHabilidadExtra cartaNueva = new CartaHabilidadExtra();
-        
-        //NUMERO DE COLECCION
-        if(this.idColeccionSeleccionada()){
-            int numColeccion = this.cb_idColeccion.getValue().numero;
-            NumeroIdentificador numIdent = new NumeroIdentificador(cartaNueva.getCaracterRepresentativo(), numColeccion);
-            cartaNueva.setNumId(numIdent);
-        }
-        
-        //NOMBRE
-        if(this.nombreCartaFueIngresado()){
-                        
-            String nombre = this.nombreCarta.getText();
-            
-            cartaNueva.setNombre(nombre);
-        } 
-        
-        //EFECTO
-        if(this.efectoFueIngresado()){
-            String efectoIngresado = this.efecto.getText();
-            cartaNueva.setEfecto(efectoIngresado);
-        }
-        
-        //DESCRIPCION DE OBJETIVOS VALIDOS
-        if(this.descripcionObjetivosFueIngresado()){
-            String descripcionIngresado = this.descripcionObjetivos.getText();
-            cartaNueva.setDescripcionObjetivos(descripcionIngresado);
-        }
-        
-        //IMAGEN
-        if(this.imagenFueIngresada()){
-            
-            this.guardarImagenDeCarta(cartaNueva);
-        }
-        
-        this.cartaCreada = cartaNueva;
-    }
-
-    @Override
-    public Carta getCartaCreada() {
-        return this.cartaCreada;    
-    }
-
     @Override
     public ETipoCarta obtenerTipoDeCarta() {
         return ETipoCarta.HABILIDAD_EXTRA;
     }
+    
+    @Override
+    public Carta getCartaCreada() {
+        return this.cartaAGuardar;    
+    }
+    @Override
+    public void ingresarCartaAEditar(Carta carta) {
+       if(carta instanceof CartaHabilidadExtra CHE){
+            this.nombreCarta.setText(CHE.getNombre());
+            this.cb_idColeccion.setValue(EColecciones.valueOf(CHE.getNumId().getNumeroColeccion()));
+            this.efecto.setText(CHE.getEfecto());
+            
+            this.descripcionObjetivos.setText(CHE.getDescripcionObjetivos());
+            this.setURLImagen(CHE.getUrlImagen());
+            this.reasignarImagen();
+            
+        } else {
+            throw new IllegalArgumentException("La carta debe ser una CartaHabilidadExtra, no una de otro tipo.");
+        }
+    }
+    
+    private void guardarCarta(CartaHabilidadExtra cartaHabilidadExtra){
+        this.cartaAGuardar = cartaHabilidadExtra;
+    }
+
+    @Override
+    public void intentarCrearCarta(){
+        CartaHabilidadExtra cartaNueva = null;
+        
+        try { 
+            String nombreIngresado = this.nombreCarta.getText().trim();
+            
+            
+            NumeroIdentificador numId = this.formarNumId();
+            
+            cartaNueva = new CartaHabilidadExtra(
+                    nombreIngresado, numId, this.efecto.getText().trim());
+        
+        } catch (ParametroObligatorioEsNullException ex) {
+            
+            ArrayList<IAtributo>camposFaltantes = ex.getCamposRequeridos();
+            this.mostrarAvisosCamposObligatoriosVacios(camposFaltantes);
+            
+        } catch(Exception ex){
+
+            System.out.println(ex.getMessage());
+        }
+        
+        if(cartaNueva != null){
+
+            //IMAGEN
+            if(this.getImagenObtenida() != null){
+                this.guardarImagenDeCarta(cartaNueva);
+            }            
+            if(this.getURLImagen() != null && !(this.getURLImagen().isBlank())){
+                cartaNueva.setUrlImagen(this.getURLImagen());
+            }
+            
+            //DESCRIPCION DE OBJETIVOS VALIDOS
+            String descripcion = this.descripcionObjetivos.getText();
+            if(descripcion != null && !descripcion.isEmpty()){  
+                cartaNueva.setDescripcionObjetivos(descripcion);
+            }
+
+            this.guardarCarta(cartaNueva);
+        }
+        
+        
+    }
+
+    
     
     @Override 
     public void continuar(ActionEvent evento){
@@ -86,52 +121,21 @@ public class EditorHabilidadExtraController extends EditorCartaController implem
         super.continuar(evento);
     }
     @Override
-    public void mostrarAvisoCamposObligatoriosVacios(ArrayList<IAtributo> atributosObligatorios){
-    
+    public void mostrarAvisosCamposObligatoriosVacios(ArrayList<IAtributo> atributosObligatorios){
+        for(IAtributo faltante : atributosObligatorios){
+                switch(faltante){
+                    case EAtributoCarta.NOMBRE -> this.lbl_errorNombre.setVisible(true);
+                    case EAtributoCarta.NUM_IDENT -> this.lbl_errorColeccion.setVisible(true);
+                    case EAtributoHabilidadExtra.EFECTO -> this.lbl_errorEfecto.setVisible(true);
+                    default -> System.out.println(faltante);
+                }
+            }
     }
-    
-    private boolean idColeccionSeleccionada(){
-        Boolean retorno = true;
-        
-        if(this.cb_idColeccion.getValue() == null){
-            retorno = false;
-        }
-        return retorno;
-    }
-    private boolean nombreCartaFueIngresado(){
-        Boolean retorno = true;
-        
-        if(this.nombreCarta.getText() == null || this.nombreCarta.getText().isBlank()){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean imagenFueIngresada(){
-        Boolean retorno = true;
-    
-        if(this.getImagenObtenida() == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean efectoFueIngresado(){
-        Boolean retorno = true;
-    
-        if(this.efecto.getText() == null){
-            retorno = false;
-        }
-        
-        return retorno;
-    }
-    private boolean descripcionObjetivosFueIngresado(){
-        Boolean retorno = true;
-    
-        if(this.descripcionObjetivos.getText() == null){
-            retorno = false;
-        }
-        
-        return retorno;
+
+    @Override
+    public void ocultarAvisosCamposObligatoriosVacios() {
+        this.lbl_errorNombre.setVisible(false);
+        this.lbl_errorColeccion.setVisible(false);
+        this.lbl_errorEfecto.setVisible(false);    
     }
 }

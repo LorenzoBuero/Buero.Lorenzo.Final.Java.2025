@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.diseniointeligente.ControladoresUI.PopupFiltrosController">
+    <stylesheets>
+        <URL value="@/styles/popupfiltros.css" />
+    </stylesheets>
+   <children>
+      <Button layoutX="54.0" layoutY="260.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+      <Button layoutX="312.0" layoutY="260.0" mnemonicParsing="false" onAction="#confirmar" text="Aplicar" />
+      <Button layoutX="242.0" layoutY="73.0" mnemonicParsing="false" onAction="#reiniciarFiltros" text="Reiniciar filtros" />
+      <CheckBox fx:id="chb_habilitarCriaturas" layoutX="232.0" layoutY="117.0" mnemonicParsing="false" text="Criaturas" />
+      <CheckBox fx:id="chb_habilitarEventos" layoutX="231.0" layoutY="150.0" mnemonicParsing="false" text="Eventos" />
+      <CheckBox fx:id="chb_habilitarHabilidadesExtra" layoutX="231.0" layoutY="185.0" mnemonicParsing="false" text="Habilidades Extra" />
+      <CheckBox fx:id="chb_habilitarSoloSinImagen" layoutX="231.0" layoutY="224.0" mnemonicParsing="false" text="Solo cartas sin imagen" />
+      <Label layoutX="284.0" layoutY="32.0" text="Filtros" />
+      <Label layoutX="45.0" layoutY="77.0" text="Ordenamiento" />
+      <ChoiceBox fx:id="cb_ordenarPor" layoutX="23.0" layoutY="104.0" prefWidth="150.0" />
+      <CheckBox fx:id="chb_ordenarMayorAMenor" layoutX="42.0" layoutY="176.0" mnemonicParsing="false" text="Mayor a menor" />
+   </children>
+</AnchorPane>

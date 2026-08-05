@@ -7,7 +7,7 @@ import java.util.Comparator;
  *
  * @author Lorenzo Buero
  */
-public class OrdenarPorNomrbeAlfabetico implements Comparator<Carta>{
+public class OrdenarPorNombreAlfabetico implements Comparator<Carta>{
 
     @Override
     public int compare(Carta carta1, Carta carta2) {

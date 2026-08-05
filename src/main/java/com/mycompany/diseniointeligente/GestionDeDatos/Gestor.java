@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 /**
  *
  * @author Lorenzo Buero
  */
-public class Gestor<T extends IParseable> implements CRUD<T>, IParseable{
+public class Gestor<T extends IParseable> implements CRUD<T>{//, IParseable{
     private final List<T> elementos;
     private final Class<T> clase;
     
@@ -26,8 +28,9 @@ public class Gestor<T extends IParseable> implements CRUD<T>, IParseable{
     }
     
     @Override
-    public void crear(List<T> elementos){
-        this.elementos.addAll(elementos);
+    public void crear(List<? extends T> elementosNuevos){
+        Gestor.copiar(elementosNuevos, elementos);
+        //elementos.addAll(elementosNuevos);
     }
 
     @Override
@@ -84,9 +87,51 @@ public class Gestor<T extends IParseable> implements CRUD<T>, IParseable{
         return retorno;
     }
     
+    public static <T> void copiar(
+        List<? extends T> origen,
+        List<? super T> destino){
+
+            destino.addAll(origen);
+    }
     
+    public List<T> obtenerFiltrado(Predicate<? super T> condicion, GestorIterator<T> iterador){
+        List<T> retorno = new ArrayList<>();
+        
+        while(iterador.hasNext()){
+            T valor = iterador.next();
+            if(condicion.test(valor)){
+                retorno.add(valor);
+            }
+        }
+
+        return retorno;
+    }
     
-    @Override
+    public List<T> obtenerOrdenado(BiFunction<? super T, ? super T, Integer> ordenador, List<T> lista){
+        
+        List<T> retorno = new ArrayList<>(lista);
+        int tamanio = retorno.size();
+
+        for(int i = 0; i < tamanio - 1; i++){
+
+            for(int j = 0; j < tamanio - i - 1; j++){
+
+                T actual = retorno.get(j);
+                T siguiente = retorno.get(j + 1);
+
+                if(ordenador.apply(actual, siguiente) > 0){
+
+                    retorno.set(j, siguiente);
+                    retorno.set(j + 1, actual);
+
+                }
+            }
+        }
+
+        return retorno;
+    }
+    
+    /*@Override
     public String aCSV() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
@@ -94,5 +139,5 @@ public class Gestor<T extends IParseable> implements CRUD<T>, IParseable{
     @Override
     public String aTextoDescriptivo() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    }*/
 }

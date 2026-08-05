@@ -1,13 +1,21 @@
 package com.mycompany.diseniointeligente.ControladoresUI;
 
+import com.mycompany.diseniointeligente.GestionDeDatos.ConfigFiltroYOrdenamiento;
 import com.mycompany.diseniointeligente.GestionDeDatos.Gestor;
 import com.mycompany.diseniointeligente.GestionDeDatos.GestorIterator;
+import com.mycompany.diseniointeligente.GestionDeDatos.OrdenamientoCartas;
+import com.mycompany.diseniointeligente.GestionDeDatos.OrdenarPorNombreAlfabetico;
+import com.mycompany.diseniointeligente.GestionDeDatos.OrdenarPorTipoCarta;
 import com.mycompany.diseniointeligente.Modelos.Carta;
 import com.mycompany.diseniointeligente.Modelos.CartaCriatura;
 import com.mycompany.diseniointeligente.Modelos.CartaEvento;
 import com.mycompany.diseniointeligente.Modelos.CartaHabilidadExtra;
 import com.mycompany.diseniointeligente.Modelos.ETipoCarta;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -47,7 +56,9 @@ public class PrincipalController {
     private ListView<Carta> listaCartas;
     
     private Gestor<Carta> gestorCartas = new Gestor<>(Carta.class);
-    private GestorIterator<Carta> iterador = this.gestorCartas.iterator();
+    //private GestorIterator<Carta> iterador = this.gestorCartas.iterator();
+    
+    private ConfigFiltroYOrdenamiento filtros = new ConfigFiltroYOrdenamiento();
     
     public void initialize(){
         this.actualizarControladores();
@@ -87,7 +98,37 @@ public class PrincipalController {
         
     }
     
-    public void mostrarSelectorFiltros(ActionEvent evento){}
+    public void mostrarSelectorFiltros(ActionEvent evento){
+    
+        try{
+
+            FXMLLoader cargador = new FXMLLoader(getClass().getResource("/com/mycompany/diseniointeligente/Escenas/PopupFiltros.fxml"));
+            Parent objetivo = cargador.load();
+
+            PopupFiltrosController controlador = cargador.getController();
+            controlador.establecerFiltros(this.filtros);
+
+            Stage escenario = new Stage();
+            escenario.initModality(Modality.APPLICATION_MODAL);
+
+            Scene escena = new Scene(objetivo);
+
+            escenario.setScene(escena);
+            escenario.showAndWait();
+
+            ConfigFiltroYOrdenamiento filtroNuevo = controlador.obtenerFiltros();
+            if(controlador.getGuardarEstosDatos()){
+                this.filtros = filtroNuevo;
+                this.actualizarListViewCartas();
+            }
+            
+        } catch (IOException ex){
+            System.out.println(ex.getLocalizedMessage());
+        }
+    
+    
+    
+    }
     
     public void verImagen(ActionEvent evento){
         try{
@@ -199,9 +240,7 @@ public class PrincipalController {
             }
             
             
-        } catch (IOException ex){
-            System.out.println(ex.getMessage());
-        } catch (IllegalArgumentException ex){
+        } catch (IOException | IllegalArgumentException ex){
             System.out.println(ex.getMessage());
         }
     
@@ -290,7 +329,80 @@ public class PrincipalController {
     
     
     private void actualizarListViewCartas(){
-        this.listaCartas.getItems().setAll(this.gestorCartas.leer());
+        
+        GestorIterator<Carta> iterador = this.gestorCartas.iterator();
+        if(!this.filtros.mostrarCriaturas){
+            
+            Predicate<Carta> obtenerCriaturas = carta ->
+                    !(carta instanceof CartaCriatura);
+            
+            List<Carta> listaNueva = this.gestorCartas.obtenerFiltrado(obtenerCriaturas, iterador);
+            iterador = new GestorIterator<>(listaNueva);
+        } 
+        if(!this.filtros.mostrarEventos){
+            
+            Predicate<Carta> obtenerEvento = carta -> 
+                    !(carta instanceof CartaEvento);
+            
+            List<Carta> listaNueva = this.gestorCartas.obtenerFiltrado(obtenerEvento, iterador);
+            iterador = new GestorIterator<>(listaNueva);
+        } 
+        if(!this.filtros.mostrarHabilidadesExtra){
+            
+            Predicate<Carta> obtenerHabExt = carta -> 
+                    !(carta instanceof CartaHabilidadExtra);
+            
+            List<Carta> listaNueva = this.gestorCartas.obtenerFiltrado(obtenerHabExt, iterador);
+            iterador = new GestorIterator<>(listaNueva);
+        } 
+        if(this.filtros.mostrarSinImagen){
+            
+            Predicate<Carta> obtenerHabExt = carta -> {
+                if(carta.getUrlImagen() == null || carta.getUrlImagen().isBlank()){
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+            
+            List<Carta> listaNueva = this.gestorCartas.obtenerFiltrado(obtenerHabExt, iterador);
+            iterador = new GestorIterator<>(listaNueva);
+        } 
+        
+        BiFunction<Carta, Carta, Integer> ordenamiento = (cartaA, cartaB) ->{
+            Integer retorno = 0;
+            if(null != this.filtros.ordenamiento)switch (this.filtros.ordenamiento) {
+                case ID:
+                    retorno = cartaA.compareTo(cartaB);
+                    break;
+                case NOMBRE:{
+                    OrdenarPorNombreAlfabetico ordenador = new OrdenarPorNombreAlfabetico();
+                    retorno = ordenador.compare(cartaA, cartaB);
+                        break;
+                    }
+                case TIPO:{
+                    OrdenarPorTipoCarta ordenador = new OrdenarPorTipoCarta();
+                    retorno = ordenador.compare(cartaA, cartaB);
+                        break;
+                    }
+                default:
+                    break;
+            }
+            return retorno;
+        };
+        
+        
+        List<Carta> listaFiltrada = new ArrayList<>();
+        while(iterador.hasNext()){
+            listaFiltrada.add(iterador.next());
+        }
+        listaFiltrada = this.gestorCartas.obtenerOrdenado(ordenamiento, listaFiltrada);
+        if(!this.filtros.ordenarMayorAMenor){
+            listaFiltrada = listaFiltrada.reversed();
+        }
+        
+        
+        this.listaCartas.getItems().setAll(listaFiltrada);
     }
     
     private void actualizarControladores(){

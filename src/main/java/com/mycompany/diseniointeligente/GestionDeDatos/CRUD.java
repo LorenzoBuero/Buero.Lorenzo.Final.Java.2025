@@ -14,7 +14,7 @@ import java.util.List;
 public interface CRUD<T extends IParseable> {
     void crear(T elemento);
     
-    void crear(List<T> elementos);
+    void crear(List<? extends T> elementos);
 
     List<T> leer();
 
